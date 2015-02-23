@@ -526,6 +526,7 @@ Transitionable.registerMethod('snap', SnapTransition);*/
                     vidVisible = true;
                     hider(b)
                     scoreMod.setOrigin([0.5,0.5])
+                    score.setProperties({'fontSize':'1em'})
                     scoresize.set([ss[0] / 1.1,ss[1] / 1.3],TRANSITION,function(){
                         lock = false
                     })
@@ -540,6 +541,7 @@ Transitionable.registerMethod('snap', SnapTransition);*/
                         lock = false
                     })
                     scorealign.set([.75,.5])
+                    score.setProperties({'fontSize':'3em'})
                     score.setContent('9.2/10')
                 }
                 }
