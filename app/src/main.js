@@ -66,7 +66,14 @@ Transitionable.registerMethod('snap', SnapTransition);*/
     var mainContext = Engine.createContext();
     
     var ss = mainContext.getSize();
-    var gwidth = ss[0] / 2.2
+    //var gwidth = ss[0] / 2.2
+    var size = {}
+    size.width = function(){
+        return mainContext.getSize()[0]
+    }
+    size.height = function(){
+        return mainContext.getSize()[1]
+    }
     
     var viewSize = [undefined,300]
     
@@ -140,8 +147,8 @@ Transitionable.registerMethod('snap', SnapTransition);*/
     //**************************************************
     login.on('click', function(){
         
-        var url = 'https://accounts.google.com/o/oauth2/auth?client_id='+clientObj.id+'&redirect_uri=http%3A%2F%2Ffamous-grid-agreen757.c9.io%2Fauth%2Fcallback&scope=https://www.googleapis.com/auth/youtubepartner+https://www.googleapis.com/auth/yt-analytics.readonly&response_type=token'
-        //var url = 'https://accounts.google.com/o/oauth2/auth?client_id='+clientObj.id+'&redirect_uri=http%3A%2F%2Flocalhost:3000%2Fauth%2Fcallback&scope=https://www.googleapis.com/auth/youtubepartner+https://www.googleapis.com/auth/yt-analytics.readonly&response_type=token'
+        //var url = 'https://accounts.google.com/o/oauth2/auth?client_id='+clientObj.id+'&redirect_uri=http%3A%2F%2Ffamous-grid-agreen757.c9.io%2Fauth%2Fcallback&scope=https://www.googleapis.com/auth/youtubepartner+https://www.googleapis.com/auth/yt-analytics.readonly&response_type=token'
+        var url = 'https://accounts.google.com/o/oauth2/auth?client_id='+clientObj.id+'&redirect_uri=http%3A%2F%2Flocalhost:3000%2Fauth%2Fcallback&scope=https://www.googleapis.com/auth/youtubepartner+https://www.googleapis.com/auth/yt-analytics.readonly&response_type=token'
         
         window.location.replace(url)
     })
@@ -212,9 +219,7 @@ Transitionable.registerMethod('snap', SnapTransition);*/
             })
             
             //***********store all of our static values
-            var sizes = {
-                
-            }
+            
             
             
             //******************TRANSITIONS
@@ -282,7 +287,11 @@ Transitionable.registerMethod('snap', SnapTransition);*/
             
             var score = new Surface({
                 properties: {
-                    'background-color':'#eee'
+                    'background-color':'#eee',
+                    'textAlign':'center',
+                    'paddingTop':'40px',
+                    fontSize:'3em',
+                    'color':'blue'
                 }
             })
             var scoreMod = new Modifier({
@@ -326,7 +335,7 @@ Transitionable.registerMethod('snap', SnapTransition);*/
              //***************SHOW PROFILE INFORMATION
             var picture = foo.snippet.thumbnails.high.url
             var pic = new Surface({
-                content:'<div><img height=80" width="80" src="'+picture+'"></div>',
+                content:'<div><img height="80" width="80" src="'+picture+'"></div>',
                 size: [100,100]
             })
             var picmod = new Modifier({
@@ -426,7 +435,7 @@ Transitionable.registerMethod('snap', SnapTransition);*/
                     hider(b);
                     vidVisible = true;
                     viewsize.set([ss[0] / 1.1,ss[1] / 1.3],TRANSITION)
-                    views.setProperties({'paddingTop':'0px'})
+                    views.setProperties({'paddingTop':'0px','fontSize':'1em'})
                     views.setContent('<center><div><p id="score">'+viewCount+'</p><p>Views on your channel</p></div><div><p id="score">'+videoCount+'</p><p>Videos on your channel</p></div><div><p id="score">'+subs+'</p><p>Subscribers on your channel</p></div></center>')
                     viewalign.set([.5,0.5],TRANSITION,function(){
                         lock = false;
@@ -438,7 +447,7 @@ Transitionable.registerMethod('snap', SnapTransition);*/
                     viewsize.set([ss[0] / 2.2,ss[1] / 5.2],TRANSITION,function(){
                         lock = false
                     })
-                    views.setProperties({'paddingTop':'35px'})
+                    views.setProperties({'paddingTop':'35px','fontSize':'1.5em'})
                     views.setContent('Engagement Stats')
                     viewalign.set([.75,0.5])
                 }
@@ -521,7 +530,7 @@ Transitionable.registerMethod('snap', SnapTransition);*/
                         lock = false
                     })
                     scorealign.set([.5,0.53])
-                    score.setContent('<div id=vid><center><p id="score">Your Score Details</p><center></div>')
+                    score.setContent('Your score details')
                 }
                 else{
                     vidVisible = false;
@@ -531,7 +540,7 @@ Transitionable.registerMethod('snap', SnapTransition);*/
                         lock = false
                     })
                     scorealign.set([.75,.5])
-                    score.setContent('<div id="vid"><center><p id="score">9.2/10</p></center></div>')
+                    score.setContent('9.2/10')
                 }
                 }
             })
@@ -557,7 +566,7 @@ Transitionable.registerMethod('snap', SnapTransition);*/
             })
             geosize.set([ss[0] / 2.2,ss[1] / 5.2],TRANSITION)
             scoresize.set([ss[0] / 2.2,ss[1] / 5.2],TRANSITION,function(){
-                score.setContent('<div id="vid"><center><p id="score">9.2/10</p></center></div>')
+                score.setContent('9.2/10')
             })
             //views.setContent('<div><center><p>Views: '+viewCount+'</p><p>Videos: '+videoCount+'</p><p>Subscribers: '+subs+'</p></center><div>')
             
