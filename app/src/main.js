@@ -19,7 +19,8 @@ define(function(require, exports, module) {
     var RenderNode = require('famous/core/RenderNode');
     var Transitionable = require("famous/transitions/Transitionable");
     var Easing = require('famous/transitions/Easing')
-    var hello = require('/../lib/hello/dist/hello.all.js')
+    var FastClick = require('famous/inputs/FastClick')
+    //var hello = require('/../lib/hello/dist/hello.all.js')
     //var $
     
     //******************INPUT GOOGLE CREDS*****************
@@ -64,11 +65,11 @@ Transitionable.registerMethod('snap', SnapTransition);*/
     // create the main context
     var mainContext = Engine.createContext();
     
-    var viewSize = [undefined,400]
+    var viewSize = [undefined,300]
     
     var view = new View()
     var bottomModifier = new StateModifier({
-      origin: [0, 1],
+      //origin: [0, 1],
       align: [0, 1]
     });
     var sizeModifier = new StateModifier({
@@ -78,7 +79,7 @@ Transitionable.registerMethod('snap', SnapTransition);*/
     
     var background = new Surface({
       properties: {
-        backgroundColor: 'gray',
+        backgroundColor: 'grey',
       }
     });
     var backModifier = new StateModifier({
@@ -101,7 +102,8 @@ Transitionable.registerMethod('snap', SnapTransition);*/
         }
     })
     var titleModifier = new Modifier({
-        origin: [0, 0]
+        origin: [0, 0],
+        align: [.005,0]
     })
     var $ = window.jQuery;
     $('#loading').hide()
@@ -111,7 +113,7 @@ Transitionable.registerMethod('snap', SnapTransition);*/
     var login = new Surface({
         //need to add click events to this
         //try require hello.js up top and running the code back here
-        content: "<div id='login'><p>Login area</p></div>",
+        content: "<div id='login'><p>Click to login</p></div>",
         size: [150,50],
         properties: {
             textAlign: "center",
@@ -134,7 +136,7 @@ Transitionable.registerMethod('snap', SnapTransition);*/
     //**************************************************
     login.on('click', function(){
         
-        var url = 'https://accounts.google.com/o/oauth2/auth?client_id='+clientObj.id+'&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Fauth%2Fcallback&scope=https://www.googleapis.com/auth/youtubepartner+https://www.googleapis.com/auth/yt-analytics.readonly&response_type=token'
+        var url = 'https://accounts.google.com/o/oauth2/auth?client_id='+clientObj.id+'&redirect_uri=http%3A%2F%2Ffamous-grid-agreen757.c9.io%2Fauth%2Fcallback&scope=https://www.googleapis.com/auth/youtubepartner+https://www.googleapis.com/auth/yt-analytics.readonly&response_type=token'
         
         window.location.replace(url)
     })
@@ -142,6 +144,7 @@ Transitionable.registerMethod('snap', SnapTransition);*/
     //****************HANDLE RESPONSE - GET TOKEN
     //CHECK IF A HASH IS PRESENT
     if(window.location.hash){
+        var token = window.location.hash.split('#').slice(1,2)[0].split('&')[0].split('=')[1]
         
         //**********************STORE VARIABLES*****************
         var gclaims = {};
@@ -189,7 +192,8 @@ Transitionable.registerMethod('snap', SnapTransition);*/
             var pubsect = new Surface({
                 content: "<p id='pub'>Published on "+datepub+"</p>",
                 properties: {
-                    textAlign: 'center'
+                    textAlign: 'center',
+                    'margin-top':'10px'
                 }
             })
             var pubmod = new Modifier({
@@ -311,7 +315,7 @@ Transitionable.registerMethod('snap', SnapTransition);*/
                 size: [100,100]
             })
             var picmod = new Modifier({
-                origin: [.5, -1],
+                origin: [.4, -1],
                 align: [.51, 0.0],
                 transform: Transform.scale(0, 0, 1)
             })
@@ -356,11 +360,15 @@ Transitionable.registerMethod('snap', SnapTransition);*/
                     }
                 })
             }
-            
-            videos.on('click', function(){
+            var lock = false
+            videos.on('click', function(e){
                 //console.log('clicked')
                 
+                //var lock = false;
                 //console.log(gclaims)
+                //console.log(lock)
+                if(!lock){
+                lock = true;
                 var b = videotrans;
                 if(!vidVisible){
                     if(gclaims.claimLength == undefined || gclaims.thirdPartyClaims == undefined){
@@ -374,32 +382,47 @@ Transitionable.registerMethod('snap', SnapTransition);*/
                     hider(b)
                     vidVisible = true;
                     videosize.set([300,400],TRANSITION)
-                    vidalign.set([0.5,0.6],TRANSITION)
+                    vidalign.set([0.5,0.5],TRANSITION,function(){
+                        //console.log('unlocking')
+                        lock = false
+                    })
                     videos.setContent('<center><div><p id="score">'+claims+'</p><p>Claims on your channel</p></div></center><hr><center><div><p id="score">'+thirdPartyClaims+'</p><p>Videos/Assets currently in conflict</p></div></center>')
                 }
                 else{
                     vidVisible = false;
                     videosize.set([145,100],TRANSITION)
-                    vidalign.set([.28,0.5],TRANSITION)
+                    vidalign.set([.28,0.5],TRANSITION,function(){
+                        lock = false;
+                    })
                     videos.setContent('<div id="vid"><center><p>Video Breakdown</p></center></div>')
                     shower(b)
                 }
+                }
             })
             views.on('click',function(){
+                
+                if(!lock){
+                    lock = true;
+                
                 var b = viewtrans;
                 if(!vidVisible){
                     hider(b);
                     vidVisible = true;
                     viewsize.set([300,400],TRANSITION)
                     views.setContent('<center><div><p id="score">'+viewCount+'</p><p>Views on your channel</p></div><div><p id="score">'+videoCount+'</p><p>Videos on your channel</p></div><div><p id="score">'+subs+'</p><p>Subscribers on your channel</p></div></center>')
-                    viewalign.set([.5,0.6],TRANSITION)
+                    viewalign.set([.5,0.5],TRANSITION,function(){
+                        lock = false;
+                    })
                 }
                 else{
                     vidVisible = false;
                     shower(b);
-                    viewsize.set([145,100],TRANSITION)
+                    viewsize.set([145,100],TRANSITION,function(){
+                        lock = false
+                    })
                     views.setContent('<div id="vid"><center><p>Engagement Stats</p></center><div>')
                     viewalign.set([.75,0.5])
+                }
                 }
             })
             
@@ -408,14 +431,19 @@ Transitionable.registerMethod('snap', SnapTransition);*/
             scrollview.sequenceFrom(surfaces)
             geoSurface.pipe(scrollview)
             geoSurface.on('click',function(){
+                if(!lock){
+                    lock = true    
+                
                 var b = geoMod
                 if(!vidVisible){
                     vidVisible = true;
                     //videotrans.setTransform(Transform.behind)
                     hider(b)
                     geoMod.setOrigin([0.5,0.5])
-                    geosize.set([300,400],TRANSITION)
-                    geoalign.set([.5,0.63])
+                    geosize.set([300,400],TRANSITION,function(){
+                        lock = false
+                    })
+                    geoalign.set([.5,0.53])
                     if(geo.states[0]){
                         var foo = geo.states[0].toString().split(',');
                         var state = foo[0]
@@ -424,7 +452,7 @@ Transitionable.registerMethod('snap', SnapTransition);*/
                         var averageViewDuration = foo[3]   
                     }
                     var data = "";
-                    data += '<center><div id="vid">Your top 3 states</div></center>'
+                    data += '<center><div id="top">Your top 3 US states</div></center>'
                     if(geo.states.length >= 2){
                         geo.states.map(function(e,i){
                             //console.log(e[0])
@@ -437,7 +465,7 @@ Transitionable.registerMethod('snap', SnapTransition);*/
                         })
                     }
                     else{
-                      geoSurface.setContent('<div id="vid"><p id="score">No geographic info</p></div>')  
+                      geoSurface.setContent('<div id="vid"><p id="score">No geographic info</p></div>')
                     }
                     /*geoSurface.setContent('<center><div id="vid">Your top 5 states</div></center><center><p id="score">'+state+'</p></center><div><center><table><tr><th>Views</th><th>Est min watch</th><th>Avg view dur.</th></tr><tr><td>'+views+'</td><td>'+estimatedMinutesWatched+'</td><td>'+averageViewDuration+'</td></tr></table></center></div>')*/
                 }
@@ -446,32 +474,43 @@ Transitionable.registerMethod('snap', SnapTransition);*/
                     shower(b)
                     geoMod.setOrigin([.5,-1])
                     geoalign.set([.28,0.5])
-                    geosize.set([145,100],TRANSITION)
+                    geosize.set([145,100],TRANSITION,function(){
+                        lock = false
+                    })
                     geoSurface.setContent('<div id="vid"><center><p>Geographic Breakdown</p></center></div>')
                     
                     
                 }
                 //geoSurface.setContent('<div><center><p>Views: '+viewCount+'</p><p>Videos: '+videoCount+'</p><p>Subscribers: '+subs+'</p></center><div>')
                 //viewalign.set([.28,0.5],TRANSITION)
+                }
             })
             
             score.on('click',function(){
                 var b = scoreMod;
+                if(!lock){
+                    lock = true    
+                
                 if(!vidVisible){
                     vidVisible = true;
                     hider(b)
                     scoreMod.setOrigin([0.5,0.5])
-                    scoresize.set([300,400],TRANSITION)
-                    scorealign.set([.5,0.63])
+                    scoresize.set([300,400],TRANSITION,function(){
+                        lock = false
+                    })
+                    scorealign.set([.5,0.53])
                     score.setContent('<div id=vid><center><p id="score">Your Score Details</p><center></div>')
                 }
                 else{
                     vidVisible = false;
                     shower(b)
                     scoreMod.setOrigin([.5,-1]);
-                    scoresize.set([145,100],TRANSITION)
+                    scoresize.set([145,100],TRANSITION,function(){
+                        lock = false
+                    })
                     scorealign.set([.75,.5])
-                    score.setContent('<div id="vid"><center><p id="score">9.2</p></center></div>')
+                    score.setContent('<div id="vid"><center><p id="score">9.2/10</p></center></div>')
+                }
                 }
             })
             
@@ -495,7 +534,7 @@ Transitionable.registerMethod('snap', SnapTransition);*/
             })
             geosize.set([145,100],TRANSITION)
             scoresize.set([145,100],TRANSITION,function(){
-                score.setContent('<div id="vid"><center><p id="score">9.2</p></center></div>')
+                score.setContent('<div id="vid"><center><p id="score">9.2/10</p></center></div>')
             })
             //views.setContent('<div><center><p>Views: '+viewCount+'</p><p>Videos: '+videoCount+'</p><p>Subscribers: '+subs+'</p></center><div>')
             
