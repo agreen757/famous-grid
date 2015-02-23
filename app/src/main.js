@@ -65,6 +65,8 @@ Transitionable.registerMethod('snap', SnapTransition);*/
     // create the main context
     var mainContext = Engine.createContext();
     
+    var ss = mainContext.getSize();
+    
     var viewSize = [undefined,300]
     
     var view = new View()
@@ -132,11 +134,13 @@ Transitionable.registerMethod('snap', SnapTransition);*/
     mainContext.add(loginorigin).add(login)
     
     
+    
     //*****************AUTHENTICATION SECTION***********
     //**************************************************
     login.on('click', function(){
         
-        var url = 'https://accounts.google.com/o/oauth2/auth?client_id='+clientObj.id+'&redirect_uri=http%3A%2F%2Ffamous-grid-agreen757.c9.io%2Fauth%2Fcallback&scope=https://www.googleapis.com/auth/youtubepartner+https://www.googleapis.com/auth/yt-analytics.readonly&response_type=token'
+        //var url = 'https://accounts.google.com/o/oauth2/auth?client_id='+clientObj.id+'&redirect_uri=http%3A%2F%2Ffamous-grid-agreen757.c9.io%2Fauth%2Fcallback&scope=https://www.googleapis.com/auth/youtubepartner+https://www.googleapis.com/auth/yt-analytics.readonly&response_type=token'
+        var url = 'https://accounts.google.com/o/oauth2/auth?client_id='+clientObj.id+'&redirect_uri=http%3A%2F%2Flocalhost:3000%2Fauth%2Fcallback&scope=https://www.googleapis.com/auth/youtubepartner+https://www.googleapis.com/auth/yt-analytics.readonly&response_type=token'
         
         window.location.replace(url)
     })
@@ -190,10 +194,11 @@ Transitionable.registerMethod('snap', SnapTransition);*/
             //****************SHOW PUBLISHING INFORMATION
             var datepub = foo.snippet.publishedAt.split('T')[0]
             var pubsect = new Surface({
-                content: "<p id='pub'>Published on "+datepub+"</p>",
+                content: 'Published: '+datepub,
                 properties: {
                     textAlign: 'center',
-                    'margin-top':'10px'
+                    'margin-top':'10px',
+                    color:'white'
                 }
             })
             var pubmod = new Modifier({
@@ -487,6 +492,7 @@ Transitionable.registerMethod('snap', SnapTransition);*/
             })
             
             score.on('click',function(){
+                console.log(ss)
                 var b = scoreMod;
                 if(!lock){
                     lock = true    
@@ -523,17 +529,18 @@ Transitionable.registerMethod('snap', SnapTransition);*/
             var videoCount = foo.statistics.videoCount
             var subs = foo.statistics.subscriberCount
             //viewtrans.setOrigin([.5, 0.5],TRANSITION)
-            videosize.set([145,100],TRANSITION,function(){
+            videosize.set([ss[0] / 2.2,100],TRANSITION,function(){
                 videos.setContent('<div id="vid"><center><p>Video Breakdown</p></center></div>')
             })
-            viewsize.set([145,100],TRANSITION,function(){
+            //console.log(ss)
+            viewsize.set([ss[0] / 2.2,100],TRANSITION,function(){
                 views.setContent('<div id="vid"><center><p>Engagement Stats</p></center><div>')
             })
             videotrans.setOrigin([.5,0.5],TRANSITION,function(){
                 geoSurface.setContent('<div id="vid"><center><p>Geographic Breakdown</p></center></div>')
             })
-            geosize.set([145,100],TRANSITION)
-            scoresize.set([145,100],TRANSITION,function(){
+            geosize.set([ss[0] / 2.2,100],TRANSITION)
+            scoresize.set([ss[0] / 2.2,100],TRANSITION,function(){
                 score.setContent('<div id="vid"><center><p id="score">9.2/10</p></center></div>')
             })
             //views.setContent('<div><center><p>Views: '+viewCount+'</p><p>Videos: '+videoCount+'</p><p>Subscribers: '+subs+'</p></center><div>')
