@@ -147,8 +147,8 @@ Transitionable.registerMethod('snap', SnapTransition);*/
     //**************************************************
     login.on('click', function(){
         
-        var url = 'https://accounts.google.com/o/oauth2/auth?client_id='+clientObj.id+'&redirect_uri=http%3A%2F%2Ffamous-grid-agreen757.c9.io%2Fauth%2Fcallback&scope=https://www.googleapis.com/auth/youtubepartner+https://www.googleapis.com/auth/yt-analytics.readonly&response_type=token'
-        //var url = 'https://accounts.google.com/o/oauth2/auth?client_id='+clientObj.id+'&redirect_uri=http%3A%2F%2Flocalhost:3000%2Fauth%2Fcallback&scope=https://www.googleapis.com/auth/youtubepartner+https://www.googleapis.com/auth/yt-analytics.readonly&response_type=token'
+        //var url = 'https://accounts.google.com/o/oauth2/auth?client_id='+clientObj.id+'&redirect_uri=http%3A%2F%2Ffamous-grid-agreen757.c9.io%2Fauth%2Fcallback&scope=https://www.googleapis.com/auth/youtubepartner+https://www.googleapis.com/auth/yt-analytics.readonly&response_type=token'
+        var url = 'https://accounts.google.com/o/oauth2/auth?client_id='+clientObj.id+'&redirect_uri=http%3A%2F%2Flocalhost:3000%2Fauth%2Fcallback&scope=https://www.googleapis.com/auth/youtubepartner+https://www.googleapis.com/auth/yt-analytics.readonly&response_type=token'
         
         window.location.replace(url)
     })
@@ -161,6 +161,7 @@ Transitionable.registerMethod('snap', SnapTransition);*/
         //**********************STORE VARIABLES*****************
         var gclaims = {};
         var geo = {};
+        var engagement = {};
         //******************************************************
         
         
@@ -197,6 +198,14 @@ Transitionable.registerMethod('snap', SnapTransition);*/
             console.log(data)
             var foo = data.items[0];
             //***************CHANGE TITLE - SET DESCRIPTION AND PUBLISHED DATE
+            
+            if(!foo.snippet.localized){
+                console.log('no title')
+                title.setProperties({'color':'white'})
+                title.setContent('No channel found')
+                return;
+            }
+            
             title.setContent('<h2>'+foo.snippet.localized.title+'<h2>')
             
             //****************SHOW PUBLISHING INFORMATION
@@ -435,8 +444,18 @@ Transitionable.registerMethod('snap', SnapTransition);*/
                     hider(b);
                     vidVisible = true;
                     viewsize.set([ss[0] / 1.1,ss[1] / 1.3],TRANSITION)
-                    views.setProperties({'paddingTop':'0px','fontSize':'1em'})
-                    views.setContent('<center><div><p id="score">'+viewCount+'</p><p>Views on your channel</p></div><div><p id="score">'+videoCount+'</p><p>Videos on your channel</p></div><div><p id="score">'+subs+'</p><p>Subscribers on your channel</p></div></center>')
+                    views.setProperties({'paddingTop':'10px','fontSize':'1.12em'})
+                    
+                    var demod = ''
+                    if(engagement.demoHeaders){
+                        demod += '<tr><th>'+engagement.demoHeaders[0].name+'</th><th>'+engagement.demoHeaders[1].name+'</th><th>%</th></tr>'
+                    }
+                    for(var i=0;i<=5;i++){
+                        demod += '<tr><td>'+engagement.demoRows[i][0]+'</td><td>'+engagement.demoRows[i][1]+'</td><td>'+engagement.demoRows[i][2]+'</td></tr>'
+                    }
+                    
+                    views.setContent('<div><center>Channel Stats</center><center><div id="vid"><table><tr><th>Channel Views</th><th>Videos</th><th>Subs.</th></tr><tr><td>'+engagement.viewCount+'</td><td>'+engagement.videoCount+'</td><td>'+engagement.subs+'</td></tr></table></div></center></div><center><div id="vid"><p>Male/Female US Demo</p><table>'+demod+'</table></div></center>')
+                   
                     viewalign.set([.5,0.5],TRANSITION,function(){
                         lock = false;
                     })
@@ -552,9 +571,12 @@ Transitionable.registerMethod('snap', SnapTransition);*/
             
             
             //**************SHOW SURFACES AND POPULATE CONTENT FIELDS AFTER ANIMATION
-            var viewCount = foo.statistics.viewCount
+            engagement.viewCount = foo.statistics.viewCount;
+            engagement.videoCount = foo.statistics.videoCount;
+            engagement.subs = foo.statistics.subscriberCount;
+            /*var viewCount = foo.statistics.viewCount
             var videoCount = foo.statistics.videoCount
-            var subs = foo.statistics.subscriberCount
+            var subs = foo.statistics.subscriberCount*/
             //viewtrans.setOrigin([.5, 0.5],TRANSITION)
             videosize.set([ss[0] / 2.2,ss[1] / 5.2],TRANSITION,function(){
                 videos.setContent('Video Breakdown')
@@ -649,7 +671,31 @@ Transitionable.registerMethod('snap', SnapTransition);*/
                         console.log(data,status)   
                     })
                 })*/
-            }).then(function(){
+            }).then(function(data){
+            var dateobj = {
+                    thismonth : function(){
+                        return new Date().toISOString().split('T')[0]
+                    },
+                    lastmonth : function(){
+                        var x = new Date();
+                        x.setDate(x.getDate()-30)
+                        return x.toISOString().split('T')[0]
+                        
+                    }
+                }
+            var demoUrl = 'https://www.googleapis.com/youtube/analytics/v1/reports?ids=channel%3D%3DMINE&start-date='+dateobj.lastmonth()+'&end-date='+dateobj.thismonth()+'&metrics=viewerPercentage&dimensions=ageGroup%2Cgender&filters=country%3D%3DUS&sort=-viewerPercentage&access_token='+token;
+            
+            $.get(demoUrl,function(data,status){
+                console.log(data);
+                engagement.demoHeaders = data.columnHeaders;
+                engagement.demoRows = data.rows;
+                
+                
+                
+            })
+            
+        })
+            .then(function(){
                 console.log('last function')
                 var dateobj = {
                     thismonth : function(){
