@@ -109,7 +109,7 @@ Transitionable.registerMethod('snap', SnapTransition);*/
             textAlign: "center",
             fontSize: "1.2em",
             fontFamily: "Helvetica, Arial, Sans-Serif",
-            backgroundColor:"#333333"
+            backgroundColor:"black"
         }
     })
 
@@ -161,7 +161,7 @@ Transitionable.registerMethod('snap', SnapTransition);*/
             textAlign: "center",
             fontSize: "1.2em",
             'margin-top': '5em',
-            'background-color':'#333333',
+            'background-color':'black',
             'color':'white',
             'margin-right':'auto',
             'margin-left':'auto',
