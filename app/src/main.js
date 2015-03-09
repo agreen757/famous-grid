@@ -161,7 +161,7 @@ Transitionable.registerMethod('snap', SnapTransition);*/
             textAlign: "center",
             fontSize: "1.2em",
             'margin-top': '5em',
-            'background': 'linear-gradient(black,white)',
+            'background': 'linear-gradient(white,black)',
             'color':'white',
             'margin-right':'auto',
             'margin-left':'auto',
@@ -191,11 +191,12 @@ Transitionable.registerMethod('snap', SnapTransition);*/
     var gutter = new Surface({
         properties:{
             background: 'linear-gradient(black,white)',
-            'z-index':2
+            'z-index':2,
+            'border-radius':'20px'
         }
     })
     var gutterMod = new StateModifier({
-        size: [undefined,51],
+        size: [320,51],
         origin: [0,-.65],
         align: [0,0.5]
     })
@@ -224,8 +225,8 @@ Transitionable.registerMethod('snap', SnapTransition);*/
     })*/
 
     var loginWork = function(){
-        var url = 'https://accounts.google.com/o/oauth2/auth?client_id='+clientObj.id+'&redirect_uri=http%3A%2F%2Ffamous-grid-agreen757.c9.io%2Fauth%2Fcallback&scope=https://www.googleapis.com/auth/youtubepartner+https://www.googleapis.com/auth/yt-analytics.readonly&response_type=token'
-        //var url = 'https://accounts.google.com/o/oauth2/auth?client_id='+clientObj.id+'&redirect_uri=http%3A%2F%2Flocalhost:3000%2Fauth%2Fcallback&scope=https://www.googleapis.com/auth/youtubepartner+https://www.googleapis.com/auth/yt-analytics.readonly&response_type=token'
+        //var url = 'https://accounts.google.com/o/oauth2/auth?client_id='+clientObj.id+'&redirect_uri=http%3A%2F%2Ffamous-grid-agreen757.c9.io%2Fauth%2Fcallback&scope=https://www.googleapis.com/auth/youtubepartner+https://www.googleapis.com/auth/yt-analytics.readonly&response_type=token'
+        var url = 'https://accounts.google.com/o/oauth2/auth?client_id='+clientObj.id+'&redirect_uri=http%3A%2F%2Flocalhost:3000%2Fauth%2Fcallback&scope=https://www.googleapis.com/auth/youtubepartner+https://www.googleapis.com/auth/yt-analytics.readonly&response_type=token'
         
         window.location.replace(url)
     }
