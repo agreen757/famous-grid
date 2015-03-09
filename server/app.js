@@ -10,6 +10,7 @@ app.get('/', function(req,res){
     res.render('index')
 })
 app.get('/auth/callback',function(req,res){
+    //console.log(req.param('hash'))
     res.redirect('/')
 })
 
@@ -21,5 +22,5 @@ app.put('/servicekey',function(req,response){
     })
 })
 
-app.listen(3000)
+app.listen(process.env.PORT)
 console.log('listening on 3000')
