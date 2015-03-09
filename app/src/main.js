@@ -180,7 +180,7 @@ Transitionable.registerMethod('snap', SnapTransition);*/
     login.pipe(draggable)
     
      var loginorigin = new StateModifier({
-        origin: [0,1],
+        origin: [0,-2],
         align: [0,0.5]
     })
 
@@ -197,7 +197,7 @@ Transitionable.registerMethod('snap', SnapTransition);*/
     })
     var gutterMod = new StateModifier({
         size: [320,51],
-        origin: [0,-.65],
+        origin: [0,-3.593],
         align: [0,0.5]
     })
 
@@ -225,8 +225,8 @@ Transitionable.registerMethod('snap', SnapTransition);*/
     })*/
 
     var loginWork = function(){
-        //var url = 'https://accounts.google.com/o/oauth2/auth?client_id='+clientObj.id+'&redirect_uri=http%3A%2F%2Ffamous-grid-agreen757.c9.io%2Fauth%2Fcallback&scope=https://www.googleapis.com/auth/youtubepartner+https://www.googleapis.com/auth/yt-analytics.readonly&response_type=token'
-        var url = 'https://accounts.google.com/o/oauth2/auth?client_id='+clientObj.id+'&redirect_uri=http%3A%2F%2Flocalhost:3000%2Fauth%2Fcallback&scope=https://www.googleapis.com/auth/youtubepartner+https://www.googleapis.com/auth/yt-analytics.readonly&response_type=token'
+        var url = 'https://accounts.google.com/o/oauth2/auth?client_id='+clientObj.id+'&redirect_uri=http%3A%2F%2Ffamous-grid-agreen757.c9.io%2Fauth%2Fcallback&scope=https://www.googleapis.com/auth/youtubepartner+https://www.googleapis.com/auth/yt-analytics.readonly&response_type=token'
+        //var url = 'https://accounts.google.com/o/oauth2/auth?client_id='+clientObj.id+'&redirect_uri=http%3A%2F%2Flocalhost:3000%2Fauth%2Fcallback&scope=https://www.googleapis.com/auth/youtubepartner+https://www.googleapis.com/auth/yt-analytics.readonly&response_type=token'
         
         window.location.replace(url)
     }
