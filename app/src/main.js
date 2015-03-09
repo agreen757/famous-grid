@@ -233,6 +233,11 @@ Transitionable.registerMethod('snap', SnapTransition);*/
     //CHECK IF A HASH IS PRESENT
     if(window.location.hash){
         var token = window.location.hash.split('#').slice(1,2)[0].split('&')[0].split('=')[1]
+
+        //******GET RID OF SURFACES WE DONT NEED
+        gutter.render = function(){return null;}
+        logoSurface.render = function(){return null;}
+        //***************************************
         
         //**********************STORE VARIABLES*****************
         var gclaims = {};
