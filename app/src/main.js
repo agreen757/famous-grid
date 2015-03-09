@@ -218,10 +218,10 @@ Transitionable.registerMethod('snap', SnapTransition);*/
     
     //*****************AUTHENTICATION SECTION***********
     //**************************************************
-    login.on('click', function(){
+    /*login.on('click', function(){
         
         return loginWork();
-    })
+    })*/
 
     var loginWork = function(){
         var url = 'https://accounts.google.com/o/oauth2/auth?client_id='+clientObj.id+'&redirect_uri=http%3A%2F%2Ffamous-grid-agreen757.c9.io%2Fauth%2Fcallback&scope=https://www.googleapis.com/auth/youtubepartner+https://www.googleapis.com/auth/yt-analytics.readonly&response_type=token'
@@ -490,8 +490,8 @@ Transitionable.registerMethod('snap', SnapTransition);*/
                 var b = videotrans;
                 if(!vidVisible){
                     if(gclaims.claimLength == undefined || gclaims.thirdPartyClaims == undefined){
-                        var claims = "No Claim Info"
-                        var thirdPartyClaims = "No Claim Info"
+                        var claims = "0"
+                        var thirdPartyClaims = "0"
                     }
                     else{
                         var claims = gclaims.claimLength;
