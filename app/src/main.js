@@ -161,11 +161,12 @@ Transitionable.registerMethod('snap', SnapTransition);*/
             textAlign: "center",
             fontSize: "1.2em",
             'margin-top': '5em',
-            'background-color':'black',
+            'background': 'linear-gradient(black,white)',
             'color':'white',
             'margin-right':'auto',
             'margin-left':'auto',
             'border-radius':'20px',
+            'border':'solid 1px #848484',
             'z-index':5
         }
     })
@@ -194,7 +195,7 @@ Transitionable.registerMethod('snap', SnapTransition);*/
         }
     })
     var gutterMod = new StateModifier({
-        size: [undefined,50],
+        size: [undefined,51],
         origin: [0,-.65],
         align: [0,0.5]
     })
