@@ -237,7 +237,13 @@ Transitionable.registerMethod('snap', SnapTransition);*/
         //******GET RID OF SURFACES WE DONT NEED
         gutter.render = function(){return null;}
         logoSurface.render = function(){return null;}
+        login.render = function(){return null;}
         //***************************************
+
+        titleBottom.setProperties({
+            'background-color':'black'
+        })
+
         
         //**********************STORE VARIABLES*****************
         var gclaims = {};
@@ -261,10 +267,7 @@ Transitionable.registerMethod('snap', SnapTransition);*/
         //**********************************************    
           
         title.setContent('<h2>Loading channel info...<h2><br>')
-        loginorigin.setOpacity(
-            0,
-            {curve: 'linear', duration : 500}
-        );
+        
         //mainContext.add(viewtrans).add(views)
         //mainContext.add(videotrans).add(videos)
         
@@ -500,8 +503,9 @@ Transitionable.registerMethod('snap', SnapTransition);*/
                         //console.log('unlocking')
                         lock = false
                     })
-                    videos.setProperties({'paddingTop':'0px','fontSize':'1em'})
-                    videos.setContent('<center><div><p id="score">'+claims+'</p><p>Claims on your channel</p></div></center><hr><center><div><p id="score">'+thirdPartyClaims+'</p><p>Videos/Assets currently in conflict</p></div></center>')
+                    videos.setProperties({'paddingTop':'10px','fontSize':'1em','paddingLeft':'10px'})
+                    //videos.setContent('<center><div><p id="score">'+claims+'</p><p>Claims on your channel</p></div></center><hr><center><div><p id="score">'+thirdPartyClaims+'</p><p>Videos/Assets currently in conflict</p></div></center>')
+                    videos.setContent('<div style="border-radius:50px;padding:10px;background-color:black;color:white;width:90px"><p style="font-size:3em">'+claims+'</p></div><div><p style="font-size:1.5em;margin-top:10px">Claims on your channel</p></div><div style="margin-top:40px;border-radius:50px;padding:10px;background-color:black;color:white;width:90px;float:right;margin-right:10px"><p style="font-size:3em">'+thirdPartyClaims+'</p></div><div><p style="font-size:1.5em;margin-top:10px;margin-right:10px;float:right">Assets currently in conflict</p></div>')
                 }
                 else{
                     vidVisible = false;
