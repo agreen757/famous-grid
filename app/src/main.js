@@ -104,12 +104,12 @@ Transitionable.registerMethod('snap', SnapTransition);*/
     
     //TITLE TEXT
     var title = new Surface({
-        content: "<h1>Login to get started</h1>",
+        content: "<h1></h1>",
         properties: {
             textAlign: "center",
             fontSize: "1.2em",
             fontFamily: "Helvetica, Arial, Sans-Serif",
-            backgroundColor:"black"
+            backgroundColor:"#333333"
         }
     })
 
@@ -140,7 +140,7 @@ Transitionable.registerMethod('snap', SnapTransition);*/
         size: [200,200]
     })
     var logoMod = new Modifier({
-        align: [.2,.15]
+        align: [.2,.08]
     })
 
 
@@ -161,13 +161,16 @@ Transitionable.registerMethod('snap', SnapTransition);*/
             textAlign: "center",
             fontSize: "1.2em",
             'margin-top': '5em',
-            'background-color':'#eee',
+            'background-color':'#333333',
+            'color':'white',
             'margin-right':'auto',
-            'margin-left':'auto'
+            'margin-left':'auto',
+            'border-radius':'20px',
+            'z-index':5
         }
     })
 
-    //MAKE THE LOGIN DRAGGABLE
+    // *************************  MAKE THE LOGIN DRAGGABLE
     var draggable = new Draggable({
         xRange: [-220,220],
         yRange: [0, 0]
@@ -179,12 +182,33 @@ Transitionable.registerMethod('snap', SnapTransition);*/
         origin: [0,1],
         align: [0,0.5]
     })
+
+    //*****************************************************
+
+    //***************************GUTTER TO HOLD THE LOGIN DRAG
+
+    var gutter = new Surface({
+        properties:{
+            background: 'linear-gradient(black,white)',
+            'z-index':2
+        }
+    })
+    var gutterMod = new StateModifier({
+        size: [undefined,50],
+        origin: [0,-.70],
+        align: [0,0.5]
+    })
+
+
+    mainContext.add(gutterMod).add(gutter)
     mainContext.add(loginorigin).add(draggable).add(login)
+
+
     draggable.on('end',function(){
         //console.log(this._positionState.state)
         var state = this._positionState.state
         if(state[0] >= 190){
-            console.log('do something')
+            return loginWork();
         }
         else{
             draggable.setPosition([0,0,0],{curve:'linear',duration:100})
@@ -195,11 +219,15 @@ Transitionable.registerMethod('snap', SnapTransition);*/
     //**************************************************
     login.on('click', function(){
         
+        return loginWork();
+    })
+
+    var loginWork = function(){
         //var url = 'https://accounts.google.com/o/oauth2/auth?client_id='+clientObj.id+'&redirect_uri=http%3A%2F%2Ffamous-grid-agreen757.c9.io%2Fauth%2Fcallback&scope=https://www.googleapis.com/auth/youtubepartner+https://www.googleapis.com/auth/yt-analytics.readonly&response_type=token'
         var url = 'https://accounts.google.com/o/oauth2/auth?client_id='+clientObj.id+'&redirect_uri=http%3A%2F%2Flocalhost:3000%2Fauth%2Fcallback&scope=https://www.googleapis.com/auth/youtubepartner+https://www.googleapis.com/auth/yt-analytics.readonly&response_type=token'
         
         window.location.replace(url)
-    })
+    }
     
     //****************HANDLE RESPONSE - GET TOKEN
     //CHECK IF A HASH IS PRESENT
