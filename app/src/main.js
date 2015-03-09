@@ -224,8 +224,8 @@ Transitionable.registerMethod('snap', SnapTransition);*/
     })*/
 
     var loginWork = function(){
-        var url = 'https://accounts.google.com/o/oauth2/auth?client_id='+clientObj.id+'&redirect_uri=http%3A%2F%2Ffamous-grid-agreen757.c9.io%2Fauth%2Fcallback&scope=https://www.googleapis.com/auth/youtubepartner+https://www.googleapis.com/auth/yt-analytics.readonly&response_type=token'
-        //var url = 'https://accounts.google.com/o/oauth2/auth?client_id='+clientObj.id+'&redirect_uri=http%3A%2F%2Flocalhost:3000%2Fauth%2Fcallback&scope=https://www.googleapis.com/auth/youtubepartner+https://www.googleapis.com/auth/yt-analytics.readonly&response_type=token'
+        //var url = 'https://accounts.google.com/o/oauth2/auth?client_id='+clientObj.id+'&redirect_uri=http%3A%2F%2Ffamous-grid-agreen757.c9.io%2Fauth%2Fcallback&scope=https://www.googleapis.com/auth/youtubepartner+https://www.googleapis.com/auth/yt-analytics.readonly&response_type=token'
+        var url = 'https://accounts.google.com/o/oauth2/auth?client_id='+clientObj.id+'&redirect_uri=http%3A%2F%2Flocalhost:3000%2Fauth%2Fcallback&scope=https://www.googleapis.com/auth/youtubepartner+https://www.googleapis.com/auth/yt-analytics.readonly&response_type=token'
         
         window.location.replace(url)
     }
@@ -505,7 +505,6 @@ Transitionable.registerMethod('snap', SnapTransition);*/
                         lock = false
                     })
                     videos.setProperties({'paddingTop':'10px','fontSize':'1em','paddingLeft':'10px'})
-                    //videos.setContent('<center><div><p id="score">'+claims+'</p><p>Claims on your channel</p></div></center><hr><center><div><p id="score">'+thirdPartyClaims+'</p><p>Videos/Assets currently in conflict</p></div></center>')
                     videos.setContent('<div style="border-radius:50px;padding:10px;background-color:black;color:white;width:90px"><p style="font-size:3em">'+claims+'</p></div><div><p style="font-size:1.5em;margin-top:10px">Claims on your channel</p></div><div style="margin-top:40px;border-radius:50px;padding:10px;background-color:black;color:white;width:90px;float:right;margin-right:10px"><p style="font-size:3em">'+thirdPartyClaims+'</p></div><div><p style="font-size:1.5em;margin-top:10px;margin-right:10px;float:right">Assets currently in conflict</p></div>')
                 }
                 else{
@@ -536,15 +535,16 @@ Transitionable.registerMethod('snap', SnapTransition);*/
                     var viewContent = ''
                     if(engagement.demoRows){
                         if(engagement.demoHeaders){
-                            demod += '<tr><th>'+engagement.demoHeaders[0].name+'</th><th>'+engagement.demoHeaders[1].name+'</th><th>%</th></tr>'
+                            demod += '<tr><th>'+engagement.demoHeaders[0].name+'</th><th>'+engagement.demoHeaders[1].name+'</th></tr>'
                         }
-                        for(var i=0;i<=5;i++){
-                            demod += '<tr><td>'+engagement.demoRows[i][0]+'</td><td>'+engagement.demoRows[i][1]+'</td><td>'+engagement.demoRows[i][2]+'</td></tr>'
+                        for(var i=0;i<engagement.demoRows.length;i++){
+                            demod += '<tr><td><div style="padding:5px">'+engagement.demoRows[i][0]+'</div></td><td style="background-color:black;color:white"><center><div>'+engagement.demoRows[i][1]+'</div></center></td></tr>'
                         }
-                        viewContent = '<div><center>Channel Stats</center><center><div id="vid"><table><tr><th>Channel Views</th><th>Videos</th><th>Subs.</th></tr><tr><td>'+engagement.viewCount+'</td><td>'+engagement.videoCount+'</td><td>'+engagement.subs+'</td></tr></table></div></center></div><center><div id="vid"><p>Male/Female US Demo</p><table>'+demod+'</table></div></center>'
+                        viewContent = '<div><center>Channel Stats</center><center><div id="vid"><table><tr><th>Channel Views</th><th>Videos</th><th>Subs.</th></tr><tr><td>'+engagement.viewCount+'</td><td>'+engagement.videoCount+'</td><td>'+engagement.subs+'</td></tr></table></div></center></div><center><div id="vid"><p>Social Shares</p><table>'+demod+'</table></div></center>'
+
                     }
                     else{
-                        viewContent = '<div><center>Channel Stats</center><center><div id="vid"><table><tr><th>Channel Views</th><th>Videos</th><th>Subs.</th></tr><tr><td>'+engagement.viewCount+'</td><td>'+engagement.videoCount+'</td><td>'+engagement.subs+'</td></tr></table></div></center></div><center><div id="vid"><p>No Demographic Information</p><table>'+demod+'</table></div></center>'
+                        viewContent = '<div><center>Channel Stats</center><center><div id="vid"><table><tr><th>Channel Views</th><th>Videos</th><th>Subs.</th></tr><tr><td>'+engagement.viewCount+'</td><td>'+engagement.videoCount+'</td><td>'+engagement.subs+'</td></tr></table></div></center></div><center><div id="vid"><p>No Sharing Information</p><table>'+demod+'</table></div></center>'
                     }
                     
                     views.setContent(viewContent)
@@ -777,8 +777,9 @@ Transitionable.registerMethod('snap', SnapTransition);*/
                     }
                 }
             var demoUrl = 'https://www.googleapis.com/youtube/analytics/v1/reports?ids=channel%3D%3DMINE&start-date='+dateobj.lastmonth()+'&end-date='+dateobj.thismonth()+'&metrics=viewerPercentage&dimensions=ageGroup%2Cgender&filters=country%3D%3DUS&sort=-viewerPercentage&access_token='+token;
+            var socialUrl = 'https://www.googleapis.com/youtube/analytics/v1/reports?ids=channel%3D%3DMINE&start-date='+dateobj.lastmonth()+'&end-date='+dateobj.thismonth()+'&metrics=shares&dimensions=sharingService&sort=-shares&access_token='+token;
             
-            $.get(demoUrl,function(data,status){
+            $.get(socialUrl,function(data,status){
                 console.log(data);
                 engagement.demoHeaders = data.columnHeaders;
                 engagement.demoRows = data.rows;
@@ -803,7 +804,7 @@ Transitionable.registerMethod('snap', SnapTransition);*/
                 }
                 //console.log(dateobj.thismonth())
                 
-                var geoUrl = 'https://www.googleapis.com/youtube/analytics/v1/reports?ids=channel%3D%3DMINE&start-date='+dateobj.lastmonth()+'&end-date='+dateobj.thismonth()+'&metrics=views%2CestimatedMinutesWatched%2CaverageViewDuration&dimensions=province&filters=country%3D%3DUS&sort=averageViewDuration&access_token='+token;
+                var geoUrl = 'https://www.googleapis.com/youtube/analytics/v1/reports?ids=channel%3D%3DMINE&start-date='+dateobj.lastmonth()+'&end-date='+dateobj.thismonth()+'&metrics=views%2CestimatedMinutesWatched%2CaverageViewDuration&dimensions=province&filters=country%3D%3DUS&sort=-averageViewDuration&access_token='+token;
                     
                 $.get(geoUrl).success(function(data,status){
                     console.log(data,status)
