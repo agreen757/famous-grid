@@ -528,14 +528,21 @@ Transitionable.registerMethod('snap', SnapTransition);*/
                     views.setProperties({'paddingTop':'10px','fontSize':'1.12em'})
                     
                     var demod = ''
-                    if(engagement.demoHeaders){
-                        demod += '<tr><th>'+engagement.demoHeaders[0].name+'</th><th>'+engagement.demoHeaders[1].name+'</th><th>%</th></tr>'
+                    var viewContent = ''
+                    if(engagement.demoRows){
+                        if(engagement.demoHeaders){
+                            demod += '<tr><th>'+engagement.demoHeaders[0].name+'</th><th>'+engagement.demoHeaders[1].name+'</th><th>%</th></tr>'
+                        }
+                        for(var i=0;i<=5;i++){
+                            demod += '<tr><td>'+engagement.demoRows[i][0]+'</td><td>'+engagement.demoRows[i][1]+'</td><td>'+engagement.demoRows[i][2]+'</td></tr>'
+                        }
+                        viewContent = '<div><center>Channel Stats</center><center><div id="vid"><table><tr><th>Channel Views</th><th>Videos</th><th>Subs.</th></tr><tr><td>'+engagement.viewCount+'</td><td>'+engagement.videoCount+'</td><td>'+engagement.subs+'</td></tr></table></div></center></div><center><div id="vid"><p>Male/Female US Demo</p><table>'+demod+'</table></div></center>'
                     }
-                    for(var i=0;i<=5;i++){
-                        demod += '<tr><td>'+engagement.demoRows[i][0]+'</td><td>'+engagement.demoRows[i][1]+'</td><td>'+engagement.demoRows[i][2]+'</td></tr>'
+                    else{
+                        viewContent = '<div><center>Channel Stats</center><center><div id="vid"><table><tr><th>Channel Views</th><th>Videos</th><th>Subs.</th></tr><tr><td>'+engagement.viewCount+'</td><td>'+engagement.videoCount+'</td><td>'+engagement.subs+'</td></tr></table></div></center></div><center><div id="vid"><p>No Demographic Information</p><table>'+demod+'</table></div></center>'
                     }
                     
-                    views.setContent('<div><center>Channel Stats</center><center><div id="vid"><table><tr><th>Channel Views</th><th>Videos</th><th>Subs.</th></tr><tr><td>'+engagement.viewCount+'</td><td>'+engagement.videoCount+'</td><td>'+engagement.subs+'</td></tr></table></div></center></div><center><div id="vid"><p>Male/Female US Demo</p><table>'+demod+'</table></div></center>')
+                    views.setContent(viewContent)
                    
                     viewalign.set([.5,0.5],TRANSITION,function(){
                         lock = false;
