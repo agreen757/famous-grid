@@ -22,5 +22,5 @@ app.put('/servicekey',function(req,response){
     })
 })
 
-app.listen(process.env.PORT)
+app.listen(3000)
 console.log('listening on 3000')

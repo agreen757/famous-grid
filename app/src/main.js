@@ -11,7 +11,7 @@ define(function(require, exports, module) {
     var Lightbox = require('famous/views/Lightbox')
     var HFLayout = require('famous/views/HeaderFooterLayout')
     //enabling dragging things
-    //var Draggable = require("famous/modifiers/Draggable");
+    var Draggable = require("famous/modifiers/Draggable");
     var LightBox = require('famous/views/Lightbox')
     var ImageSurface = require('famous/surfaces/ImageSurface');
     var GridLayout = require('famous/views/GridLayout');
@@ -80,7 +80,7 @@ Transitionable.registerMethod('snap', SnapTransition);*/
     var view = new View()
     var bottomModifier = new StateModifier({
       //origin: [0, 1],
-      align: [0, 1]
+      align: [0, 1],
     });
     var sizeModifier = new StateModifier({
         size: viewSize
@@ -108,22 +108,54 @@ Transitionable.registerMethod('snap', SnapTransition);*/
         properties: {
             textAlign: "center",
             fontSize: "1.2em",
-            fontFamily: "Helvetica, Arial, Sans-Serif"
+            fontFamily: "Helvetica, Arial, Sans-Serif",
+            backgroundColor:"black"
         }
     })
+
     var titleModifier = new Modifier({
+        size: function(){
+            var height = mainContext.getSize()[1] /2
+            return [undefined,height]
+        },
         origin: [0, 0],
-        align: [.005,0]
+        align: [0,0]
     })
+
+    var titleBottom = new Surface({
+        properties:{
+            backgroundColor: '#c70000'
+        }
+    })
+    var titleBottomMod = new StateModifier({
+        size: function(){
+            var height = mainContext.getSize()[1] /2
+            return [undefined,height]
+        },
+        origin: [0,-.3],
+    })
+
+    var logoSurface = new ImageSurface({
+        content: 'http://indmusicnetwork.com/images/WhiteMaskLogoTransparent.png',
+        size: [200,200]
+    })
+    var logoMod = new Modifier({
+        align: [.2,.15]
+    })
+
+
     var $ = window.jQuery;
     $('#loading').hide()
+
+    mainContext.add(titleBottomMod).add(titleBottom)
+    mainContext.add(logoMod).add(logoSurface)
     mainContext.add(titleModifier).add(title)
     
     
     var login = new Surface({
         //need to add click events to this
         //try require hello.js up top and running the code back here
-        content: "<div id='login'><p>Click to login</p></div>",
+        content: "<div style='padding:10px' id='login'><p>Slide to login</p></div>",
         size: [150,50],
         properties: {
             textAlign: "center",
@@ -134,21 +166,37 @@ Transitionable.registerMethod('snap', SnapTransition);*/
             'margin-left':'auto'
         }
     })
+
+    //MAKE THE LOGIN DRAGGABLE
+    var draggable = new Draggable({
+        xRange: [-220,220],
+        yRange: [0, 0]
+    })
+
+    login.pipe(draggable)
     
      var loginorigin = new StateModifier({
         origin: [0,1],
         align: [0,0.5]
     })
-    mainContext.add(loginorigin).add(login)
-    
-    
+    mainContext.add(loginorigin).add(draggable).add(login)
+    draggable.on('end',function(){
+        //console.log(this._positionState.state)
+        var state = this._positionState.state
+        if(state[0] >= 190){
+            console.log('do something')
+        }
+        else{
+            draggable.setPosition([0,0,0],{curve:'linear',duration:100})
+        }
+    })
     
     //*****************AUTHENTICATION SECTION***********
     //**************************************************
     login.on('click', function(){
         
-        var url = 'https://accounts.google.com/o/oauth2/auth?client_id='+clientObj.id+'&redirect_uri=http%3A%2F%2Ffamous-grid-agreen757.c9.io%2Fauth%2Fcallback&scope=https://www.googleapis.com/auth/youtubepartner+https://www.googleapis.com/auth/yt-analytics.readonly&response_type=token'
-        //var url = 'https://accounts.google.com/o/oauth2/auth?client_id='+clientObj.id+'&redirect_uri=http%3A%2F%2Flocalhost:3000%2Fauth%2Fcallback&scope=https://www.googleapis.com/auth/youtubepartner+https://www.googleapis.com/auth/yt-analytics.readonly&response_type=token'
+        //var url = 'https://accounts.google.com/o/oauth2/auth?client_id='+clientObj.id+'&redirect_uri=http%3A%2F%2Ffamous-grid-agreen757.c9.io%2Fauth%2Fcallback&scope=https://www.googleapis.com/auth/youtubepartner+https://www.googleapis.com/auth/yt-analytics.readonly&response_type=token'
+        var url = 'https://accounts.google.com/o/oauth2/auth?client_id='+clientObj.id+'&redirect_uri=http%3A%2F%2Flocalhost:3000%2Fauth%2Fcallback&scope=https://www.googleapis.com/auth/youtubepartner+https://www.googleapis.com/auth/yt-analytics.readonly&response_type=token'
         
         window.location.replace(url)
     })
