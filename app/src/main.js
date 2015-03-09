@@ -197,7 +197,7 @@ Transitionable.registerMethod('snap', SnapTransition);*/
     })
     var gutterMod = new StateModifier({
         size: [320,51],
-        origin: [0,-3.593],
+        origin: [0,-3.594],
         align: [0,0.5]
     })
 
