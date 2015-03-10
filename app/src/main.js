@@ -160,7 +160,7 @@ Transitionable.registerMethod('snap', SnapTransition);*/
     mainContext.add(titleModifier).add(title)
     
     
-    var login = new Surface({
+    /*var login = new Surface({
         //need to add click events to this
         //try require hello.js up top and running the code back here
         content: "<div style='padding:10px' id='login'><p>Slide to login</p></div>",
@@ -180,6 +180,19 @@ Transitionable.registerMethod('snap', SnapTransition);*/
     })
 
     // *************************  MAKE THE LOGIN DRAGGABLE
+    var drag = {};
+    drag.ss = function(){
+        return size.width();
+    }
+    drag.iphone = new Draggable({
+        xRange: [0,170],
+        yRange: [0, 0]
+    })
+    drag.s4 = new Draggable({
+        xRange: [0,210],
+        yRange: [0, 0]
+    })
+
     var draggable = new Draggable({
         xRange: [0,170],
         yRange: [0, 0]
@@ -190,7 +203,7 @@ Transitionable.registerMethod('snap', SnapTransition);*/
      var loginorigin = new StateModifier({
         origin: [0,-2],
         align: [0,0.5]
-    })
+    })*/
 
     //*****************************************************
 
@@ -217,12 +230,78 @@ Transitionable.registerMethod('snap', SnapTransition);*/
         align: [0,0.5]
     })
 
+    $(document).ready(function(){
+        //console.log(window.innerWidth)
+        var login = new Surface({
+            //need to add click events to this
+            //try require hello.js up top and running the code back here
+            content: "<div style='padding:10px' id='login'><p>Slide to login</p></div>",
+            size: [150,50],
+            properties: {
+                textAlign: "center",
+                fontSize: "1.2em",
+                'margin-top': '5em',
+                'background': 'linear-gradient(white,black)',
+                'color':'white',
+                'margin-right':'auto',
+                'margin-left':'auto',
+                'border-radius':'20px',
+                'border':'solid 1px #848484',
+                'z-index':5
+            }
+        })
 
+        // *************************  MAKE THE LOGIN DRAGGABLE
+        var drag = {};
+        drag.ss = function(){
+            return size.width();
+        }
+        drag.iphone = new Draggable({
+            xRange: [0,170],
+            yRange: [0, 0]
+        })
+        drag.s4 = new Draggable({
+            xRange: [0,210],
+            yRange: [0, 0]
+        })
+
+        /*var draggable = new Draggable({
+            xRange: [0,170],
+            yRange: [0, 0]
+        })*/
+        if(window.innerWidth <= 320){
+            drag.selection = drag.iphone
+        }
+        else{
+            drag.selection = drag.s4
+        }
+
+        login.pipe(drag.selection)
+        
+         var loginorigin = new StateModifier({
+            origin: [0,-2],
+            align: [0,0.5]
+        })
+
+         mainContext.add(loginorigin).add(drag.selection).add(login)
+
+         drag.selection.on('end',function(){
+            //console.log(this._positionState.state)
+            var state = this._positionState.state
+            if(state[0] >= 170){
+                return loginWork();
+            }
+            else{
+                drag.selection.setPosition([0,0,0],{curve:'linear',duration:100})
+            }
+        })
+
+    })
     mainContext.add(gutterMod).add(gutter)
-    mainContext.add(loginorigin).add(draggable).add(login)
+    //mainContext.add(loginorigin).add(draggable).add(login)
 
 
-    draggable.on('end',function(){
+    /*draggable.on('end',function(){
         //console.log(this._positionState.state)
         var state = this._positionState.state
         if(state[0] >= 170){
@@ -231,7 +310,7 @@ Transitionable.registerMethod('snap', SnapTransition);*/
         else{
             draggable.setPosition([0,0,0],{curve:'linear',duration:100})
         }
-    })
+    })*/
     
     //*****************AUTHENTICATION SECTION***********
     //**************************************************
@@ -241,8 +320,8 @@ Transitionable.registerMethod('snap', SnapTransition);*/
     })*/
 
     var loginWork = function(){
-        //var url = 'https://accounts.google.com/o/oauth2/auth?client_id='+clientObj.id+'&redirect_uri=http%3A%2F%2Ffamous-grid-agreen757.c9.io%2Fauth%2Fcallback&scope=https://www.googleapis.com/auth/youtubepartner+https://www.googleapis.com/auth/yt-analytics.readonly&response_type=token'
-        var url = 'https://accounts.google.com/o/oauth2/auth?client_id='+clientObj.id+'&redirect_uri=http%3A%2F%2Flocalhost:3000%2Fauth%2Fcallback&scope=https://www.googleapis.com/auth/youtubepartner+https://www.googleapis.com/auth/yt-analytics.readonly&response_type=token'
+        var url = 'https://accounts.google.com/o/oauth2/auth?client_id='+clientObj.id+'&redirect_uri=http%3A%2F%2Ffamous-grid-agreen757.c9.io%2Fauth%2Fcallback&scope=https://www.googleapis.com/auth/youtubepartner+https://www.googleapis.com/auth/yt-analytics.readonly&response_type=token'
+        //var url = 'https://accounts.google.com/o/oauth2/auth?client_id='+clientObj.id+'&redirect_uri=http%3A%2F%2Flocalhost:3000%2Fauth%2Fcallback&scope=https://www.googleapis.com/auth/youtubepartner+https://www.googleapis.com/auth/yt-analytics.readonly&response_type=token'
         
         window.location.replace(url)
     }
