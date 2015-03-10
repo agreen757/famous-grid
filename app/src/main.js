@@ -181,7 +181,7 @@ Transitionable.registerMethod('snap', SnapTransition);*/
 
     // *************************  MAKE THE LOGIN DRAGGABLE
     var draggable = new Draggable({
-        xRange: [-220,220],
+        xRange: [0,170],
         yRange: [0, 0]
     })
 
@@ -225,7 +225,7 @@ Transitionable.registerMethod('snap', SnapTransition);*/
     draggable.on('end',function(){
         //console.log(this._positionState.state)
         var state = this._positionState.state
-        if(state[0] >= 190){
+        if(state[0] >= 170){
             return loginWork();
         }
         else{
@@ -241,8 +241,8 @@ Transitionable.registerMethod('snap', SnapTransition);*/
     })*/
 
     var loginWork = function(){
-        var url = 'https://accounts.google.com/o/oauth2/auth?client_id='+clientObj.id+'&redirect_uri=http%3A%2F%2Ffamous-grid-agreen757.c9.io%2Fauth%2Fcallback&scope=https://www.googleapis.com/auth/youtubepartner+https://www.googleapis.com/auth/yt-analytics.readonly&response_type=token'
-        //var url = 'https://accounts.google.com/o/oauth2/auth?client_id='+clientObj.id+'&redirect_uri=http%3A%2F%2Flocalhost:3000%2Fauth%2Fcallback&scope=https://www.googleapis.com/auth/youtubepartner+https://www.googleapis.com/auth/yt-analytics.readonly&response_type=token'
+        //var url = 'https://accounts.google.com/o/oauth2/auth?client_id='+clientObj.id+'&redirect_uri=http%3A%2F%2Ffamous-grid-agreen757.c9.io%2Fauth%2Fcallback&scope=https://www.googleapis.com/auth/youtubepartner+https://www.googleapis.com/auth/yt-analytics.readonly&response_type=token'
+        var url = 'https://accounts.google.com/o/oauth2/auth?client_id='+clientObj.id+'&redirect_uri=http%3A%2F%2Flocalhost:3000%2Fauth%2Fcallback&scope=https://www.googleapis.com/auth/youtubepartner+https://www.googleapis.com/auth/yt-analytics.readonly&response_type=token'
         
         window.location.replace(url)
     }
@@ -522,7 +522,7 @@ Transitionable.registerMethod('snap', SnapTransition);*/
                         lock = false
                     })
                     videos.setProperties({'paddingTop':'10px','fontSize':'1em','paddingLeft':'10px'})
-                    videos.setContent('<div style="border-radius:50px;padding:10px;background-color:black;color:white;width:90px"><p style="font-size:3em">'+claims+'</p></div><div><p style="font-size:1.5em;margin-top:10px">Claims on your channel</p></div><div style="margin-top:40px;border-radius:50px;padding:10px;background-color:black;color:white;width:90px;float:right;margin-right:10px"><p style="font-size:3em">'+thirdPartyClaims+'</p></div><div><p style="font-size:1.5em;margin-top:10px;margin-right:10px;float:right">Assets currently in conflict</p></div>')
+                    videos.setContent('<div style="border-radius:50px;padding:10px;background-color:black;color:white;width:90px"><p style="font-size:3em">'+claims+'</p></div><div><p style="font-size:1.5em;margin-top:10px">Claims on your channel</p></div><div style="margin-top:40px;border-radius:50px;padding:10px;background-color:black;color:white;width:90px;margin-right:10px"><p style="font-size:3em">'+thirdPartyClaims+'</p></div><div><p style="font-size:1.5em;margin-top:10px;margin-right:10px">Assets currently in conflict</p></div>')
                 }
                 else{
                     vidVisible = false;
@@ -557,7 +557,7 @@ Transitionable.registerMethod('snap', SnapTransition);*/
                         for(var i=0;i<engagement.demoRows.length;i++){
                             demod += '<tr><td><div style="padding:5px">'+engagement.demoRows[i][0]+'</div></td><td style="background-color:black;color:white"><center><div>'+engagement.demoRows[i][1]+'</div></center></td></tr>'
                         }
-                        viewContent = '<div><center>Channel Stats</center><center><div id="vid"><table><tr><th>Channel Views</th><th>Videos</th><th>Subs.</th></tr><tr><td>'+engagement.viewCount+'</td><td>'+engagement.videoCount+'</td><td>'+engagement.subs+'</td></tr></table></div></center></div><center><div id="vid"><p>Social Shares</p><table>'+demod+'</table></div></center>'
+                        viewContent = '<div><center>Channel Stats</center><center><div id="vid"><table><tr><th>Channel Views</th><th>Videos</th><th>Subs.</th></tr><tr><td>'+engagement.viewCount+'</td><td>'+engagement.videoCount+'</td><td>'+engagement.subs+'</td></tr></table></div></center></div><center><div id="vid"><p>Social Shares <em>30 days</em></p><table>'+demod+'</table></div></center>'
 
                     }
                     else{
