@@ -270,10 +270,12 @@ Transitionable.registerMethod('snap', SnapTransition);*/
             yRange: [0, 0]
         })*/
         if(window.innerWidth <= 320){
-            drag.selection = drag.iphone
+            drag.selection = drag.iphone;
+            drag.end = 170;
         }
         else{
-            drag.selection = drag.s4
+            drag.selection = drag.s4;
+            drag.end = 210;
         }
 
         login.pipe(drag.selection)
@@ -288,7 +290,7 @@ Transitionable.registerMethod('snap', SnapTransition);*/
          drag.selection.on('end',function(){
             //console.log(this._positionState.state)
             var state = this._positionState.state
-            if(state[0] >= 170){
+            if(state[0] >= drag.end){
                 return loginWork();
             }
             else{
