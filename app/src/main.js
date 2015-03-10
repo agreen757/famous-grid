@@ -230,9 +230,7 @@ Transitionable.registerMethod('snap', SnapTransition);*/
         align: [0,0.5]
     })
 
-    $(document).ready(function(){
-        //console.log(window.innerWidth)
-        var login = new Surface({
+    var login = new Surface({
             //need to add click events to this
             //try require hello.js up top and running the code back here
             content: "<div style='padding:10px' id='login'><p>Slide to login</p></div>",
@@ -250,6 +248,11 @@ Transitionable.registerMethod('snap', SnapTransition);*/
                 'z-index':5
             }
         })
+
+    $(document).ready(function(){
+        //console.log(window.innerWidth)
+        if(!window.location.hash){
+        
 
         // *************************  MAKE THE LOGIN DRAGGABLE
         var drag = {};
@@ -297,7 +300,7 @@ Transitionable.registerMethod('snap', SnapTransition);*/
                 drag.selection.setPosition([0,0,0],{curve:'linear',duration:100})
             }
         })
-
+     }
     })
     mainContext.add(gutterMod).add(gutter)
     //mainContext.add(loginorigin).add(draggable).add(login)
