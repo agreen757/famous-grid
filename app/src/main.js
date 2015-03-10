@@ -140,7 +140,12 @@ Transitionable.registerMethod('snap', SnapTransition);*/
         size: [200,200]
     })
     var logoMod = new Modifier({
-        align: [.2,.05]
+        //align: [.2,.05]
+        align: function(){
+            if(size.width() <= 320){
+                return [.2,.05]
+            }
+        }
     })
 
 
