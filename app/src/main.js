@@ -203,8 +203,16 @@ Transitionable.registerMethod('snap', SnapTransition);*/
             'border-radius':'20px'
         }
     })
-    var gutterMod = new StateModifier({
-        size: [320,51],
+    var gutterMod = new Modifier({
+        //size: [320,51],
+        size: function(){
+            if(size.width() <= 320){
+                return [320,51];
+            }
+            else{
+                return [360,51]
+            }
+        },
         origin: [0,-3.594],
         align: [0,0.5]
     })
