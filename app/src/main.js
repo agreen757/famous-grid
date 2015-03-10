@@ -18,8 +18,8 @@ define(function(require, exports, module) {
     var ScrollView = require('famous/views/Scrollview');
     var RenderNode = require('famous/core/RenderNode');
     var Transitionable = require("famous/transitions/Transitionable");
-    var Easing = require('famous/transitions/Easing')
-    var FastClick = require('famous/inputs/FastClick')
+    var Easing = require('famous/transitions/Easing');
+    var FastClick = require('famous/inputs/FastClick');
     //var hello = require('/../lib/hello/dist/hello.all.js')
     //var $
     
@@ -351,6 +351,9 @@ Transitionable.registerMethod('snap', SnapTransition);*/
         var gclaims = {};
         var geo = {};
         var engagement = {};
+        var chanscore = {};
+        chanscore.shareTotal = 0;
+        var gpub = '';
         //******************************************************
         
         
@@ -396,6 +399,7 @@ Transitionable.registerMethod('snap', SnapTransition);*/
             
             //****************SHOW PUBLISHING INFORMATION
             var datepub = foo.snippet.publishedAt.split('T')[0]
+            gpub = datepub;
             var pubsect = new Surface({
                 content: 'Published: '+datepub,
                 properties: {
@@ -633,15 +637,17 @@ Transitionable.registerMethod('snap', SnapTransition);*/
                     views.setProperties({'paddingTop':'10px','fontSize':'1.12em'})
                     
                     var demod = ''
+                    
                     var viewContent = ''
                     if(engagement.demoRows){
+
                         if(engagement.demoHeaders){
                             demod += '<tr><th>'+engagement.demoHeaders[0].name+'</th><th>'+engagement.demoHeaders[1].name+'</th></tr>'
                         }
-                        for(var i=0;i<engagement.demoRows.length;i++){
+                        for(var i=0;i<7;i++){
                             demod += '<tr><td><div style="padding:5px">'+engagement.demoRows[i][0]+'</div></td><td style="background-color:black;color:white"><center><div>'+engagement.demoRows[i][1]+'</div></center></td></tr>'
                         }
-                        viewContent = '<div><center>Channel Stats</center><center><div id="vid"><table><tr><th>Channel Views</th><th>Videos</th><th>Subs.</th></tr><tr><td>'+engagement.viewCount+'</td><td>'+engagement.videoCount+'</td><td>'+engagement.subs+'</td></tr></table></div></center></div><center><div id="vid"><p>Social Shares <em>30 days</em></p><table>'+demod+'</table></div></center>'
+                        viewContent = '<div><center>Channel Stats</center><center><div id="vid"><table><tr><th>Channel Views</th><th>Videos</th><th>Subs.</th></tr><tr><td>'+engagement.viewCount+'</td><td>'+engagement.videoCount+'</td><td>'+engagement.subs+'</td></tr></table></div></center></div><center><div id="vid"><p>Social Shares</p><table>'+demod+'</table></div></center>'
 
                     }
                     else{
@@ -744,7 +750,66 @@ Transitionable.registerMethod('snap', SnapTransition);*/
                         lock = false
                     })
                     scorealign.set([.5,0.53])
-                    score.setContent('Your score details')
+
+                    
+                    if(chanscore.chanDataRows){
+                        var c = chanscore.chanDataRows[6]
+                    }
+                    else{
+                        var c = 0
+                    }
+                    if(chanscore.claims){
+                        var claims = chanscore.claims;
+                    }
+                    else{
+                        var claims = 0;
+                    }
+                    var videos = chanscore.videoCount;
+                    var b = claims / videos;
+                    var d = chanscore.videoCount / chanscore.viewCount;
+
+                    var sharePoint = function(){
+                        if(d > .001){
+                            return 0;
+                        }
+                        if(d )
+                    }
+            
+                    var pertPoint = function(){
+                        if(c <= 10){
+                            return 0;
+                        }
+                        if(c > 10 && c <= 30){
+                            return 1
+                        }
+                        if(c > 30 && c <= 50){
+                            return 2;
+                        }
+                        if(c > 50 && c <= 70){
+                            return 3;
+                        }
+                        if(c > 70){
+                            return 4;
+                        }
+                    }
+                    var claimPoint = function(){
+                        if(b <= .1){
+                            return 0;
+                        }
+                        if(b > .1 && b <= .3){
+                            return 1;
+                        }
+                        if(b > .3 && b <= .5){
+                            return 2;
+                        }
+                        if(b > .5 && b <= .7){
+                            return 3;
+                        }
+                        if(b > .7){
+                            return 4;
+                        }
+                    }
+                    score.setContent('<p style="font-size:1.2em">Your score details</p><br><table class="table"><tr><th style="padding:5px">Avg. View Percentage</th><th style="padding:5px">Points</th></tr><tr><td>'+c+'</td><td>'+pertPoint()+'</td></tr><tr><th>Claims / Videos</th><th></th></tr><tr><td>'+claims+' / '+videos+'</td><td>'+claimPoint()+'</td></tr><tr><th>Views / Shares</th><th></th></tr><tr><td>'+chanscore.viewCount+' / '+chanscore.shareTotal+'</td><td>****</td></tr></table>')
                 }
                 else{
                     vidVisible = false;
@@ -768,6 +833,8 @@ Transitionable.registerMethod('snap', SnapTransition);*/
             engagement.viewCount = foo.statistics.viewCount;
             engagement.videoCount = foo.statistics.videoCount;
             engagement.subs = foo.statistics.subscriberCount;
+            chanscore.videoCount = foo.statistics.videoCount;
+            chanscore.viewCount = foo.statistics.viewCount;
             /*var viewCount = foo.statistics.viewCount
             var videoCount = foo.statistics.videoCount
             var subs = foo.statistics.subscriberCount*/
@@ -821,6 +888,7 @@ Transitionable.registerMethod('snap', SnapTransition);*/
                                         //console.log('at end of claims')
                                         gclaims.thirdPartyClaims = thirdPartyClaims.length;
                                         gclaims.claimLength = claimLength;
+                                        chanscore.claims = claimLength;
                                     }
                                 })
                             }
@@ -844,6 +912,7 @@ Transitionable.registerMethod('snap', SnapTransition);*/
                                         //console.log('at end of claims')
                                         gclaims.thirdPartyClaims = thirdPartyClaims.length;
                                         gclaims.claimLength = claimLength;
+                                        chanscore.claims = claimLength;
                                     }
                                 })
                             }
@@ -878,14 +947,30 @@ Transitionable.registerMethod('snap', SnapTransition);*/
                     }
                 }
             var demoUrl = 'https://www.googleapis.com/youtube/analytics/v1/reports?ids=channel%3D%3DMINE&start-date='+dateobj.lastmonth()+'&end-date='+dateobj.thismonth()+'&metrics=viewerPercentage&dimensions=ageGroup%2Cgender&filters=country%3D%3DUS&sort=-viewerPercentage&access_token='+token;
-            var socialUrl = 'https://www.googleapis.com/youtube/analytics/v1/reports?ids=channel%3D%3DMINE&start-date='+dateobj.lastmonth()+'&end-date='+dateobj.thismonth()+'&metrics=shares&dimensions=sharingService&sort=-shares&access_token='+token;
+            var socialUrl = 'https://www.googleapis.com/youtube/analytics/v1/reports?ids=channel%3D%3DMINE&start-date='+gpub+'&end-date='+dateobj.thismonth()+'&metrics=shares&dimensions=sharingService&sort=-shares&access_token='+token;
+            //GET CHANNEL STATS SINCE CREATION - VIEWS, COMMENTS, FAVORITES, LIKES....
+            var chanUrl = 'https://www.googleapis.com/youtube/analytics/v1/reports?ids=channel%3D%3DMINE&start-date='+dateobj.lastmonth()+'&end-date='+dateobj.thismonth()+'&metrics=views%2Ccomments%2CfavoritesAdded%2Clikes%2Cdislikes%2CestimatedMinutesWatched%2CaverageViewPercentage&access_token='+token;
             
             $.get(socialUrl,function(data,status){
-                console.log(data);
+                //console.log(data);
                 engagement.demoHeaders = data.columnHeaders;
                 engagement.demoRows = data.rows;
+
+                for(var i=0;i<data.rows.length;i++){
+                    //console.log(data.rows[i][1])
+                    chanscore.shareTotal += data.rows[i][1]
+                }
                 
-                
+            })
+
+            $.get(chanUrl, function(data,status){
+                console.log('new ish');
+                //AVERAGEVIEWDURATION IS GIVEN IN SECONDS
+                console.log(data);
+                if(data.rows){
+                    chanscore.chanDataHeaders = data.columnHeaders;
+                    chanscore.chanDataRows = data.rows[0];
+                }
                 
             })
             
