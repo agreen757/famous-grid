@@ -769,10 +769,7 @@ Transitionable.registerMethod('snap', SnapTransition);*/
                     var d = chanscore.videoCount / chanscore.viewCount;
 
                     var sharePoint = function(){
-                        if(d > .001){
-                            return 0;
-                        }
-                        if(d )
+                        
                     }
             
                     var pertPoint = function(){
