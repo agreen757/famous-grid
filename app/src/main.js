@@ -354,6 +354,7 @@ Transitionable.registerMethod('snap', SnapTransition);*/
         var chanscore = {};
         chanscore.shareTotal = 0;
         var gpub = '';
+        var gscore = '';
         //******************************************************
         
         
@@ -380,11 +381,126 @@ Transitionable.registerMethod('snap', SnapTransition);*/
         var token = window.location.hash.split('#').slice(1,2)[0].split('&')[0].split("=")[1]
         var chanInfoUrl = 'https://www.googleapis.com/youtube/v3/channels?part=snippet%2Cstatistics%2CcontentDetails&mine=true&access_token='+token;
         //grab jquery from client instance
+
+
+        //****************SURFACES**************************
+        //**************************************************
+
+
+        var viewalign = new Transitionable([.75,0.5]);
+        var viewsize = new Transitionable([0,0]);
+        var geoalign = new Transitionable([.28,0.5]);
+        var geosize = new Transitionable([0,0]);
+        var scorealign = new Transitionable([.75,.5]);
+        var scoresize = new Transitionable([0,0]);
+        var TRANSITION = {duration:500,curve:Easing.outElastic}
+        //var transitionable = new Transitionable([145,100])
+        var vidalign = new Transitionable([.28,0.5])
+        var videosize = new Transitionable([0,0])
+
+
+        var views = new Surface({
+            //content: '<div><center><h2>View numbers</h2></center></div>',
+            //size: [145,100],
+            properties: {
+                'background-color': '#eee',
+                'paddingTop':'35px',
+                'fontSize':'1.5em',
+                'textAlign':'center'
+            }
+        })
+
+
+        var viewtrans = new Modifier({
+            origin: [.5, 0.5],
+            align: function(){
+                return viewalign.get()
+            },
+            size: function(){
+                return viewsize.get()
+            },
+            textAlign: "center"
+        })
+
+        //**************GEOGRAPHIC INFORMATION
+        //******************************************
+        var geoSurface = new Surface({
+            //content: '<div id="vid"><center><p>Geographic Breakdown</p></center></div>',
+            //size:[145,100],
+            properties: {
+                'background-color':'#eee',
+                'textAlign':'center',
+                'paddingTop':'35px',
+                'fontSize':'1.5em'
+            }
+        })
+        var geoMod = new Modifier({
+            origin: [.5,-1],
+            size: function(){
+                return geosize.get()
+            },
+            align: function(){
+                return geoalign.get();
+            }
+        })
+
+        //**************SCORE INFORMATIJON
+        //***********************************
+        
+        var score = new Surface({
+            properties: {
+                'background-color':'#eee',
+                'textAlign':'center',
+                'paddingTop':'40px',
+                fontSize:'3em',
+                'color':'blue'
+            }
+        })
+        var scoreMod = new Modifier({
+            origin: [.5,-1],
+            size: function(){
+                return scoresize.get()
+            },
+            align: function(){
+                return scorealign.get()
+            }
+            
+        })
+
+        //Video List SURFACE**************************************
+        var videos = new Surface({
+            //content: '<div id="vid"><center><p>Video Breakdown</p></center></div>',
+            properties: {
+                'background-color': '#eee',
+                'textAlign':'center',
+                'paddingTop':'35px',
+                'fontSize':'1.5em'
+            }
+        })
+        
+        var vidVisible = false;
+        var videotrans = new Modifier({
+            origin: [.5, -3],
+            //size: [145,100],
+            size: function(){
+                return videosize.get();
+                
+            },
+            //align: [.28, 0.5],
+            align: function(){
+                return vidalign.get();  
+            },
+            textAlign: "center"
+        })
+
+
+
+
         
         $.get(chanInfoUrl, function(data,status){
             //console.log(data,status)
             this.data = data
-            console.log(data)
+            console.log(status)
             var foo = data.items[0];
             //***************CHANGE TITLE - SET DESCRIPTION AND PUBLISHED DATE
             
@@ -422,114 +538,19 @@ Transitionable.registerMethod('snap', SnapTransition);*/
             
             
             //******************TRANSITIONS
-            var TRANSITION = {duration:500,curve:Easing.outElastic}
-            //var transitionable = new Transitionable([145,100])
-            var vidalign = new Transitionable([.28,0.5])
-            var viewalign = new Transitionable([.75,0.5])
-            var geoalign = new Transitionable([.28,0.5])
-            var scorealign = new Transitionable([.75,.5])
-            var geosize = new Transitionable([0,0])
-            var viewsize = new Transitionable([0,0])
-            var videosize = new Transitionable([0,0])
-            var scoresize = new Transitionable([0,0])
+            
+            
             //**************************************
             
             
-                //View statistic information SURFACE***********************
-            var views = new Surface({
-                //content: '<div><center><h2>View numbers</h2></center></div>',
-                //size: [145,100],
-                properties: {
-                    'background-color': '#eee',
-                    'paddingTop':'35px',
-                    'fontSize':'1.5em',
-                    'textAlign':'center'
-                }
-            })
-
-
-            var viewtrans = new Modifier({
-                origin: [.5, 0.5],
-                align: function(){
-                    return viewalign.get()
-                },
-                size: function(){
-                    return viewsize.get()
-                },
-                textAlign: "center"
-            })
+             
             
-            //**************GEOGRAPHIC INFORMATION
-            //******************************************
-            var geoSurface = new Surface({
-                //content: '<div id="vid"><center><p>Geographic Breakdown</p></center></div>',
-                //size:[145,100],
-                properties: {
-                    'background-color':'#eee',
-                    'textAlign':'center',
-                    'paddingTop':'35px',
-                    'fontSize':'1.5em'
-                }
-            })
-            var geoMod = new Modifier({
-                origin: [.5,-1],
-                size: function(){
-                    return geosize.get()
-                },
-                align: function(){
-                    return geoalign.get();
-                }
-            })
             
-            //**************SCORE INFORMATIJON
-            //***********************************
             
-            var score = new Surface({
-                properties: {
-                    'background-color':'#eee',
-                    'textAlign':'center',
-                    'paddingTop':'40px',
-                    fontSize:'3em',
-                    'color':'blue'
-                }
-            })
-            var scoreMod = new Modifier({
-                origin: [.5,-1],
-                size: function(){
-                    return scoresize.get()
-                },
-                align: function(){
-                    return scorealign.get()
-                }
-                
-            })
+            
             
             //transitionable.set(100,{duration:500,curve:'easeInOut'})
-            //Video List SURFACE**************************************
-            var videos = new Surface({
-                //content: '<div id="vid"><center><p>Video Breakdown</p></center></div>',
-                properties: {
-                    'background-color': '#eee',
-                    'textAlign':'center',
-                    'paddingTop':'35px',
-                    'fontSize':'1.5em'
-                }
-            })
             
-            var vidVisible = false;
-            var videotrans = new Modifier({
-                origin: [.5, -3],
-                //size: [145,100],
-                size: function(){
-                    return videosize.get();
-                    
-                },
-                //align: [.28, 0.5],
-                align: function(){
-                    return vidalign.get();  
-                },
-                textAlign: "center"
-            })
             
              //***************SHOW PROFILE INFORMATION
             var picture = foo.snippet.thumbnails.high.url
@@ -583,6 +604,11 @@ Transitionable.registerMethod('snap', SnapTransition);*/
                     }
                 })
             }
+
+            //RUNNNING SHOWER HERE TO MAKE SURE THAT ALL ELEMENTS START IN FRONT
+            shower();
+            //******************************************************************
+
             var lock = false
             videos.on('click', function(e){
                 //console.log('clicked')
@@ -625,7 +651,6 @@ Transitionable.registerMethod('snap', SnapTransition);*/
                 }
             })
             views.on('click',function(){
-                
                 if(!lock){
                     lock = true;
                 
@@ -766,10 +791,21 @@ Transitionable.registerMethod('snap', SnapTransition);*/
                     }
                     var videos = chanscore.videoCount;
                     var b = claims / videos;
-                    var d = chanscore.videoCount / chanscore.viewCount;
+                    var d = chanscore.shareTotal / chanscore.viewCount;
 
                     var sharePoint = function(){
-                        
+                        if(d < .001){
+                            return 0;
+                        }
+                        if(d > .001 && d <= .1){
+                            return .35;
+                        }
+                        if(d > .1 && d <= .4){
+                            return .5;
+                        }
+                        if(d > .4){
+                            return .75;
+                        }
                     }
             
                     var pertPoint = function(){
@@ -777,16 +813,16 @@ Transitionable.registerMethod('snap', SnapTransition);*/
                             return 0;
                         }
                         if(c > 10 && c <= 30){
-                            return 1
+                            return .5
                         }
                         if(c > 30 && c <= 50){
-                            return 2;
+                            return 1.5;
                         }
                         if(c > 50 && c <= 70){
-                            return 3;
+                            return 2;
                         }
                         if(c > 70){
-                            return 4;
+                            return 2.5;
                         }
                     }
                     var claimPoint = function(){
@@ -794,19 +830,30 @@ Transitionable.registerMethod('snap', SnapTransition);*/
                             return 0;
                         }
                         if(b > .1 && b <= .3){
-                            return 1;
+                            return .5;
                         }
                         if(b > .3 && b <= .5){
                             return 2;
                         }
                         if(b > .5 && b <= .7){
-                            return 3;
+                            return 4.5;
                         }
                         if(b > .7){
-                            return 4;
+                            return 6;
                         }
                     }
-                    score.setContent('<p style="font-size:1.2em">Your score details</p><br><table class="table"><tr><th style="padding:5px">Avg. View Percentage</th><th style="padding:5px">Points</th></tr><tr><td>'+c+'</td><td>'+pertPoint()+'</td></tr><tr><th>Claims / Videos</th><th></th></tr><tr><td>'+claims+' / '+videos+'</td><td>'+claimPoint()+'</td></tr><tr><th>Views / Shares</th><th></th></tr><tr><td>'+chanscore.viewCount+' / '+chanscore.shareTotal+'</td><td>****</td></tr></table>')
+                    var impressions = function(){
+                        if(chanscore.annotations == 'Yes'){
+                            return .75;
+                        }
+                        else if(chanscore.annotations == 'No'){
+                            return 0;
+                        }
+                    }
+                    var totalScore = function(){
+                        return impressions() + claimPoint() + pertPoint() + sharePoint();
+                    }
+                    score.setContent('<p style="font-size:1.2em">Your score details</p><br><table class="table"><tr><th style="padding:5px">Metric</th><th style="padding:5px">Points</th></tr><tr><th>Avg. View Percentage</th><td>'+chanscore.pertPoint+' / 2.5</td></tr><tr><th>Claims / Videos</th><td>'+chanscore.claimPoint+' / 6</td></tr><tr><th>Views / Shares</th><td>'+chanscore.sharePoint+' / .75</td></tr><tr><th>Annotations</th><td>'+chanscore.annotationsres+' / .75</td></tr></table><br><center><p style="font-size:5em">'+chanscore.TOTAL+'</p></center>')
                 }
                 else{
                     vidVisible = false;
@@ -817,7 +864,7 @@ Transitionable.registerMethod('snap', SnapTransition);*/
                     })
                     scorealign.set([.75,.5])
                     score.setProperties({'fontSize':'3em'})
-                    score.setContent('9.2/10')
+                    score.setContent(chanscore.TOTAL+'/10')
                 }
                 }
             })
@@ -832,10 +879,7 @@ Transitionable.registerMethod('snap', SnapTransition);*/
             engagement.subs = foo.statistics.subscriberCount;
             chanscore.videoCount = foo.statistics.videoCount;
             chanscore.viewCount = foo.statistics.viewCount;
-            /*var viewCount = foo.statistics.viewCount
-            var videoCount = foo.statistics.videoCount
-            var subs = foo.statistics.subscriberCount*/
-            //viewtrans.setOrigin([.5, 0.5],TRANSITION)
+            
             videosize.set([ss[0] / 2.2,ss[1] / 5.2],TRANSITION,function(){
                 videos.setContent('Video Breakdown')
             })
@@ -848,7 +892,7 @@ Transitionable.registerMethod('snap', SnapTransition);*/
             })
             geosize.set([ss[0] / 2.2,ss[1] / 5.2],TRANSITION)
             scoresize.set([ss[0] / 2.2,ss[1] / 5.2],TRANSITION,function(){
-                score.setContent('9.2/10')
+                score.setContent('0/10')
             })
             //views.setContent('<div><center><p>Views: '+viewCount+'</p><p>Videos: '+videoCount+'</p><p>Subscribers: '+subs+'</p></center><div>')
             
@@ -859,12 +903,12 @@ Transitionable.registerMethod('snap', SnapTransition);*/
             var upPlaylist = data.items[0].contentDetails.relatedPlaylists.uploads
             var vidUrl = "https://www.googleapis.com/youtube/v3/playlistItems?part=contentDetails%2Cid&maxResults=50&maxResults=50&playlistId="+upPlaylist+"&access_token="+token
             $.get(vidUrl,function(data,status){
-                console.log(data)
+                console.log(status)
                 this.data = data;
             })
             .then(function(data){
-                console.log('in claims with',data)
-                var vidSilo = []
+                //console.log('in claims with',data)
+                var vidSilo = [];
                 data.items.map(function(ele,index){
                     vidSilo.push(ele.contentDetails.videoId)
                     if(index === data.items.length - 1){
@@ -872,7 +916,7 @@ Transitionable.registerMethod('snap', SnapTransition);*/
                         if(sToken != undefined){
                             var claimurl = "https://www.googleapis.com/youtube/partner/v1/claimSearch?includeThirdPartyClaims=true&videoId="+vidSilo.toString().split(',').join('%2C')+"&access_token="+sToken
                         $.get(claimurl, function(data,status){
-                            console.log(data,status)
+                            console.log(status)
                             if(data.items){
                                 var thirdPartyClaims = []
                                 var claimLength = data.items.length
@@ -882,12 +926,15 @@ Transitionable.registerMethod('snap', SnapTransition);*/
                                         thirdPartyClaims.push(data.items.id);
                                     }
                                     if(i == data.items.length - 1){
-                                        //console.log('at end of claims')
                                         gclaims.thirdPartyClaims = thirdPartyClaims.length;
                                         gclaims.claimLength = claimLength;
                                         chanscore.claims = claimLength;
+                                        scorefunc();
                                     }
                                 })
+                            }
+                            else{
+                                scorefunc();
                             }
 
                         })
@@ -896,7 +943,7 @@ Transitionable.registerMethod('snap', SnapTransition);*/
                             setTimeout(function(){
                                 var claimurl = "https://www.googleapis.com/youtube/partner/v1/claimSearch?includeThirdPartyClaims=true&videoId="+vidSilo.toString().split(',').join('%2C')+"&access_token="+sToken
                             $.get(claimurl, function(data,status){
-                            console.log(data,status)
+                            console.log(data)
                             if(data.items){
                                 var thirdPartyClaims = []
                                 var claimLength = data.items.length
@@ -906,12 +953,18 @@ Transitionable.registerMethod('snap', SnapTransition);*/
                                         thirdPartyClaims.push(data.items.id);
                                     }
                                     if(i == data.items.length - 1){
-                                        //console.log('at end of claims')
+                                        //console.log('at end of claims',claimLength)
                                         gclaims.thirdPartyClaims = thirdPartyClaims.length;
                                         gclaims.claimLength = claimLength;
                                         chanscore.claims = claimLength;
+                                        console.log('firing claims');
+                                        scorefunc();
+
                                     }
                                 })
+                            }
+                            else{
+                                scorefunc();
                             }
 
                         })
@@ -919,18 +972,6 @@ Transitionable.registerMethod('snap', SnapTransition);*/
                         }
                     }
                 })
-                    //console.log(data)
-                    /*var claimurl = "https://www.googleapis.com/youtube/partner/v1/claimSearch?includeThirdPartyClaims=true&videoId="+vid.contentDetails.videoId+"&access_token="+token
-                    $.get(claimurl, function(data,status){
-                        //console.log(data,status)   
-                    })*/
-                /*data.items.map(function(vid){
-                    console.log('in claims')
-                    var claimurl = "https://www.googleapis.com/youtube/partner/v1/claimSearch?includeThirdPartyClaims=true&videoId="+vid.contentDetails.videoId+"&access_token="+token
-                    $.get(claimurl, function(data,status){
-                        console.log(data,status)   
-                    })
-                })*/
             }).then(function(data){
             var dateobj = {
                     thismonth : function(){
@@ -946,34 +987,35 @@ Transitionable.registerMethod('snap', SnapTransition);*/
             var demoUrl = 'https://www.googleapis.com/youtube/analytics/v1/reports?ids=channel%3D%3DMINE&start-date='+dateobj.lastmonth()+'&end-date='+dateobj.thismonth()+'&metrics=viewerPercentage&dimensions=ageGroup%2Cgender&filters=country%3D%3DUS&sort=-viewerPercentage&access_token='+token;
             var socialUrl = 'https://www.googleapis.com/youtube/analytics/v1/reports?ids=channel%3D%3DMINE&start-date='+gpub+'&end-date='+dateobj.thismonth()+'&metrics=shares&dimensions=sharingService&sort=-shares&access_token='+token;
             //GET CHANNEL STATS SINCE CREATION - VIEWS, COMMENTS, FAVORITES, LIKES....
-            var chanUrl = 'https://www.googleapis.com/youtube/analytics/v1/reports?ids=channel%3D%3DMINE&start-date='+dateobj.lastmonth()+'&end-date='+dateobj.thismonth()+'&metrics=views%2Ccomments%2CfavoritesAdded%2Clikes%2Cdislikes%2CestimatedMinutesWatched%2CaverageViewPercentage&access_token='+token;
+            var chanUrl = 'https://www.googleapis.com/youtube/analytics/v1/reports?ids=channel%3D%3DMINE&start-date='+gpub+'&end-date='+dateobj.thismonth()+'&metrics=views%2Ccomments%2CfavoritesAdded%2Clikes%2Cdislikes%2CestimatedMinutesWatched%2CaverageViewPercentage%2CannotationClosableImpressions&access_token='+token;
             
             $.get(socialUrl,function(data,status){
                 //console.log(data);
                 engagement.demoHeaders = data.columnHeaders;
                 engagement.demoRows = data.rows;
-
-                for(var i=0;i<data.rows.length;i++){
-                    //console.log(data.rows[i][1])
-                    chanscore.shareTotal += data.rows[i][1]
-                }
+                if(data.rows){
+                    for(var i=0;i<data.rows.length;i++){
+                        //console.log(data.rows[i][1])
+                        chanscore.shareTotal += data.rows[i][1];
+                    }
                 
+                }
             })
 
             $.get(chanUrl, function(data,status){
-                console.log('new ish');
-                //AVERAGEVIEWDURATION IS GIVEN IN SECONDS
-                console.log(data);
-                if(data.rows){
-                    chanscore.chanDataHeaders = data.columnHeaders;
-                    chanscore.chanDataRows = data.rows[0];
-                }
+                console.log(status);
+                chanscore.chanDataHeaders = data.columnHeaders;
+                chanscore.chanDataRows = data.rows[0];
+                scorefunc();
+
+
+                //***************************************************************
                 
             })
             
         })
             .then(function(){
-                console.log('last function')
+                //console.log('last function')
                 var dateobj = {
                     thismonth : function(){
                         return new Date().toISOString().split('T')[0]
@@ -990,7 +1032,7 @@ Transitionable.registerMethod('snap', SnapTransition);*/
                 var geoUrl = 'https://www.googleapis.com/youtube/analytics/v1/reports?ids=channel%3D%3DMINE&start-date='+dateobj.lastmonth()+'&end-date='+dateobj.thismonth()+'&metrics=views%2CestimatedMinutesWatched%2CaverageViewDuration&dimensions=province&filters=country%3D%3DUS&sort=-averageViewDuration&access_token='+token;
                     
                 $.get(geoUrl).success(function(data,status){
-                    console.log(data,status)
+                    console.log(status)
                     geo.states = []
                     if(data.rows){
                         data.rows.map(function(e,i){
@@ -1002,6 +1044,105 @@ Transitionable.registerMethod('snap', SnapTransition);*/
                 })
             })
         })
+    }
+
+    function scorefunc(){
+        //DO SCORES                            
+                                        
+        if(chanscore.chanDataRows[0][7] == 0){
+            chanscore.annotations = 'No';
+        }
+        else{
+            chanscore.annotations = 'Yes';
+        }
+        
+
+        //*********************DOING SCORE TOTALS***********************
+
+        
+            if(chanscore.chanDataRows){
+                var c = chanscore.chanDataRows[6]
+            }
+            else{
+                var c = 0
+            }
+            if(chanscore.claims){
+                var claims = chanscore.claims;
+            }
+            else{
+                var claims = 0;
+            }
+            var videos = chanscore.videoCount;
+            var b = claims / videos;
+            var d = chanscore.shareTotal / chanscore.viewCount;
+
+            var sharePoint = function(){
+                if(d < .001){
+                    return 0;
+                }
+                if(d > .001 && d <= .1){
+                    return .35;
+                }
+                if(d > .1 && d <= .4){
+                    return .5;
+                }
+                if(d > .4){
+                    return .75;
+                }
+            }
+    
+            var pertPoint = function(){
+                if(c <= 10){
+                    return 0;
+                }
+                if(c > 10 && c <= 30){
+                    return .5
+                }
+                if(c > 30 && c <= 50){
+                    return 1.5;
+                }
+                if(c > 50 && c <= 70){
+                    return 2;
+                }
+                if(c > 70){
+                    return 2.5;
+                }
+            }
+            var claimPoint = function(){
+                //console.log(claims,videos)
+                if(b <= .1){
+                    return 0;
+                }
+                if(b > .1 && b <= .3){
+                    return .5;
+                }
+                if(b > .3 && b <= .5){
+                    return 2;
+                }
+                if(b > .5 && b <= .7){
+                    return 4.5;
+                }
+                if(b > .7){
+                    return 6;
+                }
+            }
+            var annotations = function(){
+                if(chanscore.annotations = 'Yes'){
+                    return .75;
+                }
+                else{
+                    return 0;
+                }
+            }
+            var totalScore = function(){
+                return annotations() + claimPoint() + pertPoint() + sharePoint();
+            }
+            chanscore.TOTAL = totalScore()
+            chanscore.pertPoint = pertPoint();
+            chanscore.claimPoint = claimPoint();
+            chanscore.annotationsres = annotations();
+            chanscore.sharePoint = sharePoint();
+            score.setContent(totalScore()+'/10');
     }
     
     //******************************************************
