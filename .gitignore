@@ -15,7 +15,5 @@ node_modules
 
 # Project Files #
 #################
-dist
 .tmp
-app/lib
 .yo-rc.json

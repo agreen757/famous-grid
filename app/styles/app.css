@@ -1,8 +1,41 @@
 html {
-  background: #fff;
+  background: black;
 }
 
 .backfaceVisibility {
   -webkit-backface-visibility: visible;
   backface-visibility: visible;
+}
+h2 {
+    color:white
+}
+h1 {
+    color:white
+}
+img {
+    /*border-radius: 50%;*/
+}
+#pub {
+    color: white
+}
+#vid {
+    padding:20px;
+}
+#top {
+    padding:10px;
+}
+#heading {
+    font-size: 1.4em;
+}
+#score {
+    font-size: 1.4em;
+    color: blue;
+}
+#geo {
+    font-size: 1.4em;
+}
+
+table, th, td {
+    border: 1px solid black;
+    border-collapse: collapse;
 }
