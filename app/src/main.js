@@ -325,8 +325,8 @@ Transitionable.registerMethod('snap', SnapTransition);*/
     })*/
 
     var loginWork = function(){
-        var url = 'https://accounts.google.com/o/oauth2/auth?client_id='+clientObj.id+'&redirect_uri=http%3A%2F%2Ffamous-grid-agreen757.c9.io%2Fauth%2Fcallback&scope=https://www.googleapis.com/auth/youtubepartner+https://www.googleapis.com/auth/yt-analytics.readonly&response_type=token'
-        //var url = 'https://accounts.google.com/o/oauth2/auth?client_id='+clientObj.id+'&redirect_uri=http%3A%2F%2Flocalhost:3000%2Fauth%2Fcallback&scope=https://www.googleapis.com/auth/youtubepartner+https://www.googleapis.com/auth/yt-analytics.readonly&response_type=token'
+        //var url = 'https://accounts.google.com/o/oauth2/auth?client_id='+clientObj.id+'&redirect_uri=http%3A%2F%2Ffamous-grid-agreen757.c9.io%2Fauth%2Fcallback&scope=https://www.googleapis.com/auth/youtubepartner+https://www.googleapis.com/auth/yt-analytics.readonly&response_type=token'
+        var url = 'https://accounts.google.com/o/oauth2/auth?client_id='+clientObj.id+'&redirect_uri=http%3A%2F%2Flocalhost:3000%2Fauth%2Fcallback&scope=https://www.googleapis.com/auth/youtubepartner+https://www.googleapis.com/auth/yt-analytics.readonly&response_type=token'
         
         window.location.replace(url)
     }
@@ -892,7 +892,7 @@ Transitionable.registerMethod('snap', SnapTransition);*/
             })
             geosize.set([ss[0] / 2.2,ss[1] / 5.2],TRANSITION)
             scoresize.set([ss[0] / 2.2,ss[1] / 5.2],TRANSITION,function(){
-                score.setContent('0/10')
+                //score.setContent('0/10')
             })
             //views.setContent('<div><center><p>Views: '+viewCount+'</p><p>Videos: '+videoCount+'</p><p>Subscribers: '+subs+'</p></center><div>')
             
@@ -1048,13 +1048,14 @@ Transitionable.registerMethod('snap', SnapTransition);*/
 
     function scorefunc(){
         //DO SCORES                            
-                                        
-        if(chanscore.chanDataRows[0][7] == 0){
-            chanscore.annotations = 'No';
-        }
-        else{
-            chanscore.annotations = 'Yes';
-        }
+        if(chanscore.chanDataRows){
+            if(chanscore.chanDataRows[0][7] == 0){
+                chanscore.annotations = 'No';
+            }
+            else{
+                chanscore.annotations = 'Yes';
+            }
+        }                                
         
 
         //*********************DOING SCORE TOTALS***********************
